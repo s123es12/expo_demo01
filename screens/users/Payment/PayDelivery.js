@@ -69,7 +69,8 @@ const PayDelivery = ({navigation,route}) =>{
     const [commentText,setCommentText] = useState(null);
 
     const onSubmit = data =>{
-        navigation.navigate('PayGateway',{authorization:route.params.authorization});
+        //console.log('Comment Test: ',commentText);
+        navigation.navigate('PayGateway',{authorization:route.params.authorization,comment:commentText});
         
         
        

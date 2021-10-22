@@ -3,25 +3,17 @@ import {
     View,
     Text,
     Image,
-   TouchableHighlight,
     TouchableOpacity,
-    FlatList,
     StyleSheet,
     Dimensions,
-    ScrollView,
-    TextInput
+    ActivityIndicator
 } from 'react-native';
 import { WebView } from 'react-native-webview';
-import {faBars,faPeopleArrows,faMicrophone, faLiraSign,faTimes,faCheckCircle,faUndo,faChevronRight,
-faChevronLeft,faMapPin,faMapMarkerAlt,faAngleDoubleDown, faMapMarkedAlt,faThLarge,
-faLevelDownAlt,faSortAmountDown,faShareAlt,faCaretRight} from '@fortawesome/free-solid-svg-icons'
+import {faChevronLeft} from '@fortawesome/free-solid-svg-icons'
 import {SIZES} from '../../../constants/theme';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { faHeart } from '@fortawesome/free-regular-svg-icons';  
-import Modal from "react-native-modal";
-import { Button,Avatar,ListItem ,CheckBox,Rating} from 'react-native-elements';
-import QRCode from 'react-native-qrcode-svg';
-import DateTimePicker from '@react-native-community/datetimepicker';
+import { Button,CheckBox} from 'react-native-elements';
+
 
 
 
@@ -31,44 +23,40 @@ const HEIGHT =Dimensions.get('window').height;
 
 const PayGateway= ({navigation,route}) =>{
  
+    const commentText = route.params.comment;
+   
+    const [paymentMethods, setPaymentMethods]=useState([]);
+    const [isloadMethod, setLoadMethod]=useState(true);
+    const [paymentList, setPaymentList] = useState([]);
+    const [paymentSelect, setPaymentSelect]=useState();
 
-    const sender={
-        name:'Lee, Jordan',
-        phone:'+852 9000 4710',
-        email:'wendylou@gmail.com',
-        address:''
+    const handlePayment = (payment,index)=>{
+        //console.log(payment, index);
+        let new_list=[...paymentList];
+        setPaymentSelect(JSON.stringify(payment).toLowerCase());
+        
+        for(var i=0;i<paymentList.length;i++){
+            new_list[i]=false;
+        }
+        new_list[index]=!new_list[index];
+        setPaymentList(new_list);
     }
-    
-    const recipient={
-        name:'Sam Wong',
-        phone:'+852 9000 4710',
-        email:'Sam.W@gmail.com',
-        address:''
-    }
-    
 
-    const onSubmit = data =>{
 
-        fetch('https://goldrich.top/api/rest/confirm', {
-            method: 'POST',
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-                'Authorization':'Bearer '+route.params.authorization,
-                
+
+    const onSubmit = () =>{
+        //console.log(paymentSelect);
+        
+        switch(paymentSelect){
+            case 'paypal':{
+                console.log('paypal');
+                break;
             }
-        })
-        .then(response=>response.json())
-        .then((responseJson)=>{
-            console.log(responseJson);
-
-            if(responseJson.success ==1){
-              
-            }else if(responseJson.success==0){
-
+            default:{
+                console.log(paymentSelect);
             }
-          
-        }).catch((err)=>console.log(err))
+        }
+            
 
 
 
@@ -91,29 +79,35 @@ const PayGateway= ({navigation,route}) =>{
             console.log(responseJson);
 
             if(responseJson.success ==1){
-              
-                fetch('https://goldrich.top/api/rest/paymentmethods', {
-                    method: 'POST',
-                    headers: {
-                        Accept: 'application/json',
-                        'Content-Type': 'application/json',
-                        'Authorization':'Bearer '+route.params.authorization,
-                        
-                    },body:JSON.stringify({
-                        "payment_method": "pp_standard",
-                        "agree": 1,
-                        "comment": ""
-                    })
+                setPaymentMethods(responseJson.data.payment_methods);
+                responseJson.data.payment_methods.map((item,index)=>{
+                    let list = [];
+                    list[index]=false;
+                    setPaymentList(list);
                 })
-                .then(response=>response.json())
-                .then((responseJson)=>{
-                    console.log(responseJson);
-                    if(responseJson.success == 0){
+                
+                // fetch('https://goldrich.top/api/rest/paymentmethods', {
+                //     method: 'POST',
+                //     headers: {
+                //         Accept: 'application/json',
+                //         'Content-Type': 'application/json',
+                //         'Authorization':'Bearer '+route.params.authorization,
+                        
+                //     },body:JSON.stringify({
+                //         "payment_method": "pp_standard",
+                //         "agree": 1,
+                //         "comment": commentText
+                //     })
+                // })
+                // .then(response=>response.json())
+                // .then((responseJson)=>{
+                //     console.log(responseJson);
+                //     if(responseJson.success == 0){
                             
-                    }else if(responseJson.success ==1){
+                //     }else if(responseJson.success ==1){
                        
-                    }
-                }).catch((err)=>console.log(err));
+                //     }
+                // }).catch((err)=>console.log(err));
 
 
 
@@ -123,8 +117,8 @@ const PayGateway= ({navigation,route}) =>{
             }
           
         }).catch((err)=>console.log(err))
-
-
+        .finally(()=>setLoadMethod(false))
+       
         
     },[])
 
@@ -167,10 +161,26 @@ const PayGateway= ({navigation,route}) =>{
                 <View style={{padding:25,marginBottom:120}}>
                     <View style={{backgroundColor:'white',paddingHorizontal:20,borderRadius:10}}>
                         <Text style={{fontWeight:'700',borderBottomWidth:1,borderBottomColor:'#d2d2d2',paddingVertical:10}}>付款方式</Text>
-                        <View style={{flexDirection:'row',paddingVertical:10}}>
-                            <Image source={require('../../../assets/visa.png')} style={{width:50,height:50}}/>
-                            <Image source={require('../../../assets/mc.png')} style={{width:50,height:50,marginHorizontal:30}}/>
-                            <Image source={require('../../../assets/unionpay.png')} style={{width:50,height:50}}/>
+                        <View style={{flexDirection:'row',paddingVertical:10,flexWrap:'wrap'}}>
+                            {isloadMethod?<ActivityIndicator/>:
+                                paymentMethods.map((item,index)=>{
+                                    return(
+                                        <CheckBox
+                                            key={item+index}
+                                            containerStyle={{backgroundColor:'transparent',borderWidth:0,marginLeft:10,marginVertical:5,padding:0}}
+                                            textStyle={{margin:0}}
+                                            title={item.title}
+                                            checkedIcon='dot-circle-o'
+                                            checked={paymentList[index]}
+                                            onPress={()=>handlePayment(item.title,index)}
+                                            uncheckedIcon='circle-o'
+                                            checkedColor='#d9a21b'
+                                            uncheckedColor='#d9a21b'
+                                        />
+                                    )
+                                })
+                            }
+                           
                         </View>
                     </View>
                     <View style={{alignItems:'center'}}>
@@ -188,9 +198,14 @@ const PayGateway= ({navigation,route}) =>{
                         />
                     </View>
                 </View>
-                <WebView 
-                    style={styles.container}
-                    source={{ uri: 'https://expo.dev' }}
+                <WebView
+                    source={{ uri: "https://google.com" }}
+                    containerStyle={{
+                        width: '100%',
+                        height: 500,
+                        backgroundColor: "white",
+                        flex: 1,
+                    }}
                 />
 
 
@@ -218,6 +233,8 @@ const styles =StyleSheet.create({
     container: {
         flex: 1,
         marginTop: 20,
+        width: '100%',
+		height: 500,
     },
     
 });
