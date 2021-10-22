@@ -11,7 +11,7 @@ import {
     ScrollView,
     TextInput
 } from 'react-native';
-
+import { WebView } from 'react-native-webview';
 import {faBars,faPeopleArrows,faMicrophone, faLiraSign,faTimes,faCheckCircle,faUndo,faChevronRight,
 faChevronLeft,faMapPin,faMapMarkerAlt,faAngleDoubleDown, faMapMarkedAlt,faThLarge,
 faLevelDownAlt,faSortAmountDown,faShareAlt,faCaretRight} from '@fortawesome/free-solid-svg-icons'
@@ -188,6 +188,10 @@ const PayGateway= ({navigation,route}) =>{
                         />
                     </View>
                 </View>
+                <WebView 
+                    style={styles.container}
+                    source={{ uri: 'https://expo.dev' }}
+                />
 
 
 
@@ -210,7 +214,11 @@ const styles =StyleSheet.create({
         fontSize:20,
         fontWeight:'700',
         color:'#fff'
-    }
+    },
+    container: {
+        flex: 1,
+        marginTop: 20,
+    },
     
 });
 

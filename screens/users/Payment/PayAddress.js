@@ -35,6 +35,9 @@ const PayAddress = ({navigation,route}) =>{
     const [selectedCountry, setSelectedCountry] =useState();
     const [PaymentError, setPaymentError] = useState([]);
     
+    const [isLoadDefault,setLoadDefault] = useState(true);
+
+
     const [recipientAdd, setRecipientAdd] = useState({
         lastname:'test',
         firstname:'test',
@@ -271,6 +274,7 @@ const PayAddress = ({navigation,route}) =>{
             }
           
         }).catch((err)=>console.log(err))
+        .finally(()=>setLoadDefault(false))
         
 
         fetch('https://goldrich.top/api/rest/paymentaddress', {
@@ -403,7 +407,7 @@ const PayAddress = ({navigation,route}) =>{
                     <View style={{padding:25,marginBottom:80}}>
 
                         <Text style={{fontWeight:'700',marginTop:20,marginBottom:20}}>每次下單寄/收件服務地址相同, 如寄/收件地址不同, 需獨立下單</Text>
-
+                        {isLoadDefault?<ActivityIndicator/>:
                         <View style={{backgroundColor:'white',padding:20}}>
                             <Text style={{borderBottomWidth:1}}>聯絡資料（寄件人）</Text>
                             
@@ -583,7 +587,7 @@ const PayAddress = ({navigation,route}) =>{
                                 )
                             }):null}
                         </View>
-                                    
+                         }           
                         <Text style={{fontWeight:'700',marginTop:20,marginBottom:20}}>如選擇到店取件, 收件人地址請填寫金富諾有限公司</Text>
 
                         <View style={{backgroundColor:'white',padding:20}}>
