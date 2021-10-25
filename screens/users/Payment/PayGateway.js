@@ -29,6 +29,7 @@ const PayGateway= ({navigation,route}) =>{
     const [isloadMethod, setLoadMethod]=useState(true);
     const [paymentList, setPaymentList] = useState([]);
     const [paymentSelect, setPaymentSelect]=useState();
+    const [paymentId,setPaymentId]=useState();
 
     const handlePayment = (payment,index)=>{
         //console.log(payment, index);
@@ -40,24 +41,120 @@ const PayGateway= ({navigation,route}) =>{
         }
         new_list[index]=!new_list[index];
         setPaymentList(new_list);
+        setPaymentId(index);
+
+        fetch('https://goldrich.top/api/rest/paymentmethods', {
+            method: 'GET',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization':'Bearer '+route.params.authorization,
+                
+            }
+        })
+        .then(response=>response.json())
+        .then((responseJson)=>{
+           // console.log(responseJson);
+
+            if(responseJson.success ==1){
+               
+                
+                fetch('https://goldrich.top/api/rest/paymentmethods', {
+                    method: 'POST',
+                    headers: {
+                        Accept: 'application/json',
+                        'Content-Type': 'application/json',
+                        'Authorization':'Bearer '+route.params.authorization,
+                        
+                    },body:JSON.stringify({
+                        "payment_method": paymentMethods[paymentId].code,
+                        "agree": 1,
+                        "comment": commentText
+                    })
+                })
+                .then(response=>response.json())
+                .then((responseJson)=>{
+                    //console.log(responseJson);
+                    if(responseJson.success == 0){
+                            
+                    }else if(responseJson.success ==1){
+                       
+                    }
+                }).catch((err)=>console.log(err));
+
+
+
+
+            }else if(responseJson.success==0){
+
+            }
+          
+        }).catch((err)=>console.log(err))
+
+
+
     }
 
 
 
     const onSubmit = () =>{
         //console.log(paymentSelect);
-        
+        //console.log(paymentMethods[paymentId]);
         switch(paymentSelect){
             case 'paypal':{
                 console.log('paypal');
                 break;
             }
+            
             default:{
                 console.log(paymentSelect);
             }
         }
-            
+        
+        
 
+
+        fetch('https://goldrich.top/api/rest/confirm', {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization':'Bearer '+route.params.authorization,
+                
+            }
+        })
+        .then(response=>response.json())
+        .then((responseJson)=>{
+            console.log(responseJson);
+            if(responseJson.success == 0){
+               
+            }else if(responseJson.success ==1){
+                if(responseJson.data.payment_code=='cod'){
+
+                    fetch('https://goldrich.top/api/rest/confirm', {
+                        method: 'PUT',
+                        headers: {
+                            Accept: 'application/json',
+                            'Content-Type': 'application/json',
+                            'Authorization':'Bearer '+route.params.authorization,
+                            
+                        }
+                    })
+                    .then(response=>response.json())
+                    .then((responseJson)=>{
+                        console.log(responseJson);
+                        if(responseJson.success == 0){
+                                
+                        }else if(responseJson.success ==1){
+                            
+                        }
+                    }).catch((err)=>console.log(err));
+                }else{
+
+                }
+
+            }
+        }).catch((err)=>console.log(err));
 
 
 
