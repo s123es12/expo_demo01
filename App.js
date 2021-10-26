@@ -37,7 +37,7 @@ import ServiceCommentList from "./screens/users/Service/ServiceCommentList";
 import PayAddress from "./screens/users/Payment/PayAddress";
 import PayDelivery from "./screens/users/Payment/PayDelivery";
 import PayGateway from "./screens/users/Payment/PayGateway";
-
+import PaypalApp from "./screens/users/Payment/PaypalApp";
 const theme={
   ...DefaultTheme,
   colors:{
@@ -215,7 +215,11 @@ const App =({navigation})=>{
           component={PayGateway}
           options={{headerShown:false}}
         />
-
+        <Stack.Screen 
+          name="PaypalApp"
+          component={PaypalApp}
+          options={{headerShown:false}}
+        />
 
 
         <Stack.Screen 

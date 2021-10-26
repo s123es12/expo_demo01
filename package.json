@@ -1,9 +1,8 @@
 {
-  "main": "node_modules/expo/AppEntry.js",
   "scripts": {
-    "start": "expo start",
-    "android": "expo start --android",
-    "ios": "expo start --ios",
+    "start": "react-native start",
+    "android": "react-native run-android",
+    "ios": "react-native run-ios",
     "web": "expo start --web",
     "eject": "expo eject"
   },
@@ -21,18 +20,25 @@
     "@react-navigation/native": "^6.0.2",
     "@react-navigation/native-stack": "^6.1.0",
     "@react-navigation/stack": "^6.0.7",
+    "body-parser": "^1.19.0",
+    "consolidate": "^0.16.0",
+    "ejs": "^3.1.6",
     "expo": "^42.0.3",
     "expo-apple-authentication": "~3.2.1",
     "expo-facebook": "~11.3.1",
-    "expo-google-app-auth": "^8.2.2",
+    "expo-google-app-auth": "^8.2.4",
     "expo-google-sign-in": "~9.2.1",
     "expo-linear-gradient": "^9.2.0",
+    "expo-splash-screen": "~0.11.2",
     "expo-status-bar": "~1.0.4",
+    "expo-updates": "~0.8.1",
+    "express": "^4.17.1",
     "native-base": "^3.1.0",
+    "paypal-rest-sdk": "^1.8.1",
     "react": "16.13.1",
     "react-dom": "16.13.1",
     "react-hook-form": "^7.13.0",
-    "react-native": "https://github.com/expo/react-native/archive/sdk-42.0.0.tar.gz",
+    "react-native": "~0.63.4",
     "react-native-css-vh-vw": "^1.0.5",
     "react-native-elements": "^3.4.2",
     "react-native-gesture-handler": "^1.10.3",
@@ -44,19 +50,23 @@
     "react-native-screens": "^3.5.0",
     "react-native-shadow-2": "^4.1.0",
     "react-native-svg": "^12.1.1",
+    "react-native-unimodules": "0.14.10",
     "react-native-vector-icons": "^8.1.0",
     "react-native-viewport-units": "0.0.5",
     "react-native-web": "~0.13.12",
-    "react-native-webview": "11.6.2",
+    "react-native-webview": "^11.6.2",
     "styled-components": "^5.3.1",
     "styled-system": "^5.1.5"
   },
   "devDependencies": {
-    "@babel/core": "^7.9.0"
+    "@babel/core": "^7.9.0",
+    "nodemon": "^2.0.14"
   },
   "resolutions": {
     "@react-native-community/viewpager": "^2.0.1"
   },
   "private": true,
-  "proxy": "http://localhost:19006/"
+  "proxy": "http://localhost:19006/",
+  "name": "expo_demo01",
+  "version": "1.0.0"
 }

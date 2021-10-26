@@ -1,4 +1,4 @@
-import React,{useEffect, useState} from 'react';
+import React,{useEffect, useState,Component} from 'react';
 import { 
     View,
     Text,
@@ -6,7 +6,8 @@ import {
     TouchableOpacity,
     StyleSheet,
     Dimensions,
-    ActivityIndicator
+    ActivityIndicator,
+    Modal
 } from 'react-native';
 import { WebView } from 'react-native-webview';
 import {faChevronLeft} from '@fortawesome/free-solid-svg-icons'
@@ -30,6 +31,9 @@ const PayGateway= ({navigation,route}) =>{
     const [paymentList, setPaymentList] = useState([]);
     const [paymentSelect, setPaymentSelect]=useState();
     const [paymentId,setPaymentId]=useState();
+
+    const [showModal, setShowModal] = useState(false);
+    const [htmlCode, setHtmlCode] = useState('');
 
     const handlePayment = (payment,index)=>{
         //console.log(payment, index);
@@ -98,11 +102,12 @@ const PayGateway= ({navigation,route}) =>{
 
 
     const onSubmit = () =>{
-        //console.log(paymentSelect);
+         //console.log(paymentSelect);
         //console.log(paymentMethods[paymentId]);
         switch(paymentSelect){
             case 'paypal':{
                 console.log('paypal');
+                
                 break;
             }
             
@@ -110,8 +115,57 @@ const PayGateway= ({navigation,route}) =>{
                 console.log(paymentSelect);
             }
         }
+        setShowModal(!showModal);
+       
+
+        // fetch('https://api-m.sandbox.paypal.com/v2/checkout/orders', {
+        //     method: 'POST',
+        //     headers: {
+        //         Accept: 'application/json',
+        //         'Content-Type': 'application/json',
+        //         'Authorization':'Bearer A21AAJKtY-So9Vvk4tBQc9Ix5T9C1DWdiEhedMX-CrCgADbOHECNIesWEDFUMfHZFZJQ7CbRZNGAdWq5_Hpl7PeBg_nOwuhQg',
+                
+        //     },body:JSON.stringify({
+        //         "intent": "CAPTURE",
+        //         "purchase_units": [
+        //             {
+        //             "amount": {
+        //                 "currency_code": "USD",
+        //                 "value": "100.00"
+        //             }
+        //             }
+        //         ]
+        //     })
+        // })
+        // .then(response=>response.json())
+        // .then((responseJson)=>{
+        //     console.log(responseJson);
+           
+        //     setPaypalOrderId(responseJson.id);
+        //     fetch(`https://api-m.sandbox.paypal.com/v2/checkout/orders/${responseJson.id}/capture`, {
+        //             method: 'POST',
+        //             headers: {
+        //                 Accept: 'application/json',
+        //                 'Content-Type': 'application/json',
+        //                 'Authorization':'Bearer A21AAJKtY-So9Vvk4tBQc9Ix5T9C1DWdiEhedMX-CrCgADbOHECNIesWEDFUMfHZFZJQ7CbRZNGAdWq5_Hpl7PeBg_nOwuhQg',
+                        
+        //             }
+        //         })
+        //         .then(response=>response.json())
+        //         .then((responseJson)=>{
+        //             console.log(responseJson);
+        //             if(responseJson.success == 0){
+                            
+        //             }else if(responseJson.success ==1){
+                       
+        //             }
+        //         }).catch((err)=>console.log(err));
+            
+        // }).catch((err)=>console.log(err));
+
         
-        
+     
+
 
 
         fetch('https://goldrich.top/api/rest/confirm', {
@@ -126,40 +180,47 @@ const PayGateway= ({navigation,route}) =>{
         .then(response=>response.json())
         .then((responseJson)=>{
             console.log(responseJson);
+
             if(responseJson.success == 0){
                
             }else if(responseJson.success ==1){
-                if(responseJson.data.payment_code=='cod'){
-
-                    fetch('https://goldrich.top/api/rest/confirm', {
-                        method: 'PUT',
-                        headers: {
-                            Accept: 'application/json',
-                            'Content-Type': 'application/json',
-                            'Authorization':'Bearer '+route.params.authorization,
-                            
-                        }
-                    })
-                    .then(response=>response.json())
-                    .then((responseJson)=>{
-                        console.log(responseJson);
-                        if(responseJson.success == 0){
-                                
-                        }else if(responseJson.success ==1){
-                            
-                        }
-                    }).catch((err)=>console.log(err));
-                }else{
-
-                }
-
+              setHtmlCode(responseJson.data.payment);
+               
             }
         }).catch((err)=>console.log(err));
 
-
+        fetch('https://goldrich.top/api/rest/pay', {
+                method: 'GET',
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                    'Authorization':'Bearer '+route.params.authorization,
+                    
+                    }
+                })
+                .then(response=>response.json())
+                .then((responseJson)=>{
+                    console.log(responseJson);
+        
+                    if(responseJson.success == 0){
+                    
+                    }else if(responseJson.success ==1){
+                  
+        
+                    }
+                }).catch((err)=>console.log(err));
 
     }
-    
+    const handleWebViewNavigationStateChange = (newNavState) => {
+        const { url } = newNavState;
+        if (!url) return;
+
+        if (url.includes('https://goldrich.top/index.php?route=checkout/success')) {
+           
+            setShowModal(false);
+            console.log("finsih");
+          }
+    }
 
     useEffect(()=>{
         fetch('https://goldrich.top/api/rest/paymentmethods', {
@@ -173,7 +234,7 @@ const PayGateway= ({navigation,route}) =>{
         })
         .then(response=>response.json())
         .then((responseJson)=>{
-            console.log(responseJson);
+           // console.log(responseJson);
 
             if(responseJson.success ==1){
                 setPaymentMethods(responseJson.data.payment_methods);
@@ -222,7 +283,8 @@ const PayGateway= ({navigation,route}) =>{
 
     return(
 
-            <View >
+            <View style={{flex:1}}>
+                
 
                 <View style={{
                     backgroundColor:"#cc6a3e",
@@ -233,6 +295,8 @@ const PayGateway= ({navigation,route}) =>{
                     zIndex:5,
                     
                 }}>
+                   
+
                     <View style={{alignItems:'center',flex:1,flexDirection:'row',justifyContent:'space-between'}}>
                         <View style={{flexDirection:'row',alignItems:'center'}}>
                             <TouchableOpacity
@@ -247,14 +311,15 @@ const PayGateway= ({navigation,route}) =>{
                             </TouchableOpacity>
 
                             <Text style={styles.textTitle}>結賬</Text>
+                            
                         </View>
-                        
+                       
 
                        
                         
                     </View> 
                 </View>
-                
+              
                 <View style={{padding:25,marginBottom:120}}>
                     <View style={{backgroundColor:'white',paddingHorizontal:20,borderRadius:10}}>
                         <Text style={{fontWeight:'700',borderBottomWidth:1,borderBottomColor:'#d2d2d2',paddingVertical:10}}>付款方式</Text>
@@ -279,7 +344,9 @@ const PayGateway= ({navigation,route}) =>{
                             }
                            
                         </View>
+                        
                     </View>
+                   
                     <View style={{alignItems:'center'}}>
                         <Button
                             buttonStyle={{
@@ -291,26 +358,69 @@ const PayGateway= ({navigation,route}) =>{
                                 width:WIDTH*0.6
                             }}
                             title="付款"
-                            onPress={onSubmit}  
+                            onPress={()=>onSubmit()}  
                         />
+                         
                     </View>
+                   
                 </View>
-                <WebView
-                    source={{ uri: "https://google.com" }}
-                    containerStyle={{
-                        width: '100%',
-                        height: 500,
-                        backgroundColor: "white",
-                        flex: 1,
-                    }}
-                />
+              
+                <Modal 
+                    style={{flex:1,width:WIDTH,height:HEIGHT}}
+                    visible={showModal}
+                >
+                    <Button
+                        buttonStyle={{
+                            padding:10,
+                            borderWidth: 0,
+                            borderRadius:20, 
+                            backgroundColor:"#d9a21b",
+                            
+                            width:WIDTH*0.6
+                        }}
+                        title="付款"
+                        onPress={()=>setShowModal(!showModal)}  
+                    />
+                    <WebView 
+                        originWhitelist={['*']}
+                        onNavigationStateChange={handleWebViewNavigationStateChange}
+                        source={{html:
+                            `<html>
+                                <head>
+                                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                                </head>
+                                <style>
+                                    .btn{
+                                        background-color:red;
+                                        display:none;
+                                    }
+                                    .alert-danger{
+                                        display:none;
+                                    }
+                                </style>
+                                <script>
+                                window.onload=function(){   
+                                    const sendBtn = document.getElementsByClassName("btn-primary");
+                                    sendBtn[0].click();;
+                                }
+                               
+                                </script>
+                            <body>`
+                                +htmlCode+
+                            `</body>
+                            </html>`
+                        
+                        }}
+                    />
+                </Modal>
+               
 
 
 
 
                 
             </View>
-          
+            
 
            
            
@@ -318,6 +428,7 @@ const PayGateway= ({navigation,route}) =>{
        
     )
 }
+
 
 const styles =StyleSheet.create({
     textTitle:{

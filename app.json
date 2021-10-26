@@ -17,7 +17,8 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "host.exp.exponent"
     },
     "android": {
       "adaptiveIcon": {
@@ -25,11 +26,9 @@
         "backgroundColor": "#FFFFFF"
       },
       "package": "host.exp.exponent"
-      
     },
     "web": {
       "favicon": "./assets/favicon.png"
     }
-    
   }
 }
