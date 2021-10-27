@@ -184,7 +184,7 @@ const Category = ({navigation,route}) =>{
                     
                         {searchResult.length>=1?searchResult.map((item,index)=>{
                             return(
-                                <TouchableOpacity key={item.key} onPress={()=>navigation.navigate('ServiceProduct',{id:item.id,authorization:route.params.authorization})}>
+                                <TouchableOpacity key={item+index} onPress={()=>navigation.navigate('ServiceProduct',{id:item.id,authorization:route.params.authorization})}>
                                     <View style={{borderRadius:8,marginLeft:20,padding:10,marginVertical:5,width:'100%',width:WIDTH*0.9,height:HEIGHT*0.15,backgroundColor:'#fff',flexDirection:'row'}}>
                                         <View style={{flex:1}}>
                                             <Image source={{uri:item.image}} style={{height:'100%',width:'100%'}} resizeMode='cover'/>

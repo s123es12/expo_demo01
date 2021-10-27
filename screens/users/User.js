@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect,useState } from 'react';
 import { 
     View,
     Text,
@@ -25,8 +25,7 @@ const Tab = createBottomTabNavigator();
 const Stack =createStackNavigator();
 
 const user = ({route})=>{
-
-    
+   
     return(
         
             

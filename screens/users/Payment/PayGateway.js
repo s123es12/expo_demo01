@@ -34,6 +34,12 @@ const PayGateway= ({navigation,route}) =>{
 
     const [showModal, setShowModal] = useState(false);
     const [htmlCode, setHtmlCode] = useState('');
+    const [errorMessage, setErrorMessage] = useState();
+    const [getConfirm, setConfirm] = useState(false);
+    const [progressNum,setProgressNum] =useState(0);
+
+  
+
 
     const handlePayment = (payment,index)=>{
         //console.log(payment, index);
@@ -48,54 +54,27 @@ const PayGateway= ({navigation,route}) =>{
         setPaymentId(index);
 
         fetch('https://goldrich.top/api/rest/paymentmethods', {
-            method: 'GET',
+            method: 'POST',
             headers: {
                 Accept: 'application/json',
                 'Content-Type': 'application/json',
                 'Authorization':'Bearer '+route.params.authorization,
                 
-            }
+            },body:JSON.stringify({
+                "payment_method": paymentMethods[index].code,
+                "agree": 1,
+                "comment": commentText
+            })
         })
         .then(response=>response.json())
         .then((responseJson)=>{
-           // console.log(responseJson);
-
-            if(responseJson.success ==1){
-               
+            //console.log(responseJson);
+            if(responseJson.success == 0){
+                    
+            }else if(responseJson.success ==1){
                 
-                fetch('https://goldrich.top/api/rest/paymentmethods', {
-                    method: 'POST',
-                    headers: {
-                        Accept: 'application/json',
-                        'Content-Type': 'application/json',
-                        'Authorization':'Bearer '+route.params.authorization,
-                        
-                    },body:JSON.stringify({
-                        "payment_method": paymentMethods[paymentId].code,
-                        "agree": 1,
-                        "comment": commentText
-                    })
-                })
-                .then(response=>response.json())
-                .then((responseJson)=>{
-                    //console.log(responseJson);
-                    if(responseJson.success == 0){
-                            
-                    }else if(responseJson.success ==1){
-                       
-                    }
-                }).catch((err)=>console.log(err));
-
-
-
-
-            }else if(responseJson.success==0){
-
             }
-          
-        }).catch((err)=>console.log(err))
-
-
+        }).catch((err)=>console.log(err));
 
     }
 
@@ -115,58 +94,15 @@ const PayGateway= ({navigation,route}) =>{
                 console.log(paymentSelect);
             }
         }
-        setShowModal(!showModal);
+        
        
 
-        // fetch('https://api-m.sandbox.paypal.com/v2/checkout/orders', {
-        //     method: 'POST',
-        //     headers: {
-        //         Accept: 'application/json',
-        //         'Content-Type': 'application/json',
-        //         'Authorization':'Bearer A21AAJKtY-So9Vvk4tBQc9Ix5T9C1DWdiEhedMX-CrCgADbOHECNIesWEDFUMfHZFZJQ7CbRZNGAdWq5_Hpl7PeBg_nOwuhQg',
-                
-        //     },body:JSON.stringify({
-        //         "intent": "CAPTURE",
-        //         "purchase_units": [
-        //             {
-        //             "amount": {
-        //                 "currency_code": "USD",
-        //                 "value": "100.00"
-        //             }
-        //             }
-        //         ]
-        //     })
-        // })
-        // .then(response=>response.json())
-        // .then((responseJson)=>{
-        //     console.log(responseJson);
-           
-        //     setPaypalOrderId(responseJson.id);
-        //     fetch(`https://api-m.sandbox.paypal.com/v2/checkout/orders/${responseJson.id}/capture`, {
-        //             method: 'POST',
-        //             headers: {
-        //                 Accept: 'application/json',
-        //                 'Content-Type': 'application/json',
-        //                 'Authorization':'Bearer A21AAJKtY-So9Vvk4tBQc9Ix5T9C1DWdiEhedMX-CrCgADbOHECNIesWEDFUMfHZFZJQ7CbRZNGAdWq5_Hpl7PeBg_nOwuhQg',
-                        
-        //             }
-        //         })
-        //         .then(response=>response.json())
-        //         .then((responseJson)=>{
-        //             console.log(responseJson);
-        //             if(responseJson.success == 0){
-                            
-        //             }else if(responseJson.success ==1){
-                       
-        //             }
-        //         }).catch((err)=>console.log(err));
-            
-        // }).catch((err)=>console.log(err));
+        
 
         
      
 
-
+        
 
         fetch('https://goldrich.top/api/rest/confirm', {
             method: 'POST',
@@ -179,36 +115,18 @@ const PayGateway= ({navigation,route}) =>{
         })
         .then(response=>response.json())
         .then((responseJson)=>{
-            console.log(responseJson);
-
+            //console.log(responseJson);
+           
             if(responseJson.success == 0){
                
             }else if(responseJson.success ==1){
-              setHtmlCode(responseJson.data.payment);
-               
+                setShowModal(true);
+                setHtmlCode(responseJson.data.payment);
+             
             }
         }).catch((err)=>console.log(err));
 
-        fetch('https://goldrich.top/api/rest/pay', {
-                method: 'GET',
-                headers: {
-                    Accept: 'application/json',
-                    'Content-Type': 'application/json',
-                    'Authorization':'Bearer '+route.params.authorization,
-                    
-                    }
-                })
-                .then(response=>response.json())
-                .then((responseJson)=>{
-                    console.log(responseJson);
-        
-                    if(responseJson.success == 0){
-                    
-                    }else if(responseJson.success ==1){
-                  
-        
-                    }
-                }).catch((err)=>console.log(err));
+         
 
     }
     const handleWebViewNavigationStateChange = (newNavState) => {
@@ -219,7 +137,15 @@ const PayGateway= ({navigation,route}) =>{
            
             setShowModal(false);
             console.log("finsih");
-          }
+            navigation.navigate('PaypalApp',{authorization:route.params.authorization});
+        }else if(url.includes('https://goldrich.top/index.php?route=checkout/cart')){
+
+            setShowModal(false);
+            console.log("cancel");
+           
+            //navigation.navigate('Carts',{authorization:route.params.authorization});
+        }
+       
     }
 
     useEffect(()=>{
@@ -234,7 +160,7 @@ const PayGateway= ({navigation,route}) =>{
         })
         .then(response=>response.json())
         .then((responseJson)=>{
-           // console.log(responseJson);
+           console.log(responseJson);
 
             if(responseJson.success ==1){
                 setPaymentMethods(responseJson.data.payment_methods);
@@ -244,40 +170,27 @@ const PayGateway= ({navigation,route}) =>{
                     setPaymentList(list);
                 })
                 
-                // fetch('https://goldrich.top/api/rest/paymentmethods', {
-                //     method: 'POST',
-                //     headers: {
-                //         Accept: 'application/json',
-                //         'Content-Type': 'application/json',
-                //         'Authorization':'Bearer '+route.params.authorization,
-                        
-                //     },body:JSON.stringify({
-                //         "payment_method": "pp_standard",
-                //         "agree": 1,
-                //         "comment": commentText
-                //     })
-                // })
-                // .then(response=>response.json())
-                // .then((responseJson)=>{
-                //     console.log(responseJson);
-                //     if(responseJson.success == 0){
-                            
-                //     }else if(responseJson.success ==1){
-                       
-                //     }
-                // }).catch((err)=>console.log(err));
+                
+              
 
 
 
 
             }else if(responseJson.success==0){
-
+                setConfirm(true);
+                let errMsg = responseJson.error.map((item,index)=>{
+                    item[index]=item;
+                })
+                setErrorMessage(errMsg);
+                if(JSON.stringify(responseJson.error[0]).match('Missing payment address')){
+                    setTimeout(()=> navigation.navigate('PayAddress',{authorization:route.params.authorization}),2000)
+                }
             }
           
         }).catch((err)=>console.log(err))
         .finally(()=>setLoadMethod(false))
        
-        
+       
     },[])
 
 
@@ -333,7 +246,7 @@ const PayGateway= ({navigation,route}) =>{
                                             textStyle={{margin:0}}
                                             title={item.title}
                                             checkedIcon='dot-circle-o'
-                                            checked={paymentList[index]}
+                                            checked={index==paymentId}
                                             onPress={()=>handlePayment(item.title,index)}
                                             uncheckedIcon='circle-o'
                                             checkedColor='#d9a21b'
@@ -342,7 +255,7 @@ const PayGateway= ({navigation,route}) =>{
                                     )
                                 })
                             }
-                           
+                           {getConfirm && <Text style={[styles.errorText,{fontSize:16}]}>{errorMessage}</Text>}
                         </View>
                         
                     </View>
@@ -368,22 +281,17 @@ const PayGateway= ({navigation,route}) =>{
                 <Modal 
                     style={{flex:1,width:WIDTH,height:HEIGHT}}
                     visible={showModal}
-                >
-                    <Button
-                        buttonStyle={{
-                            padding:10,
-                            borderWidth: 0,
-                            borderRadius:20, 
-                            backgroundColor:"#d9a21b",
-                            
-                            width:WIDTH*0.6
-                        }}
-                        title="付款"
-                        onPress={()=>setShowModal(!showModal)}  
-                    />
+                >   
+                   
+                    <View style={{justifyContent:'center'}}>
+                        { progressNum<0.5?<ActivityIndicator size="large" color="#00ff00"/>:null}
+                    </View>
+                   
                     <WebView 
                         originWhitelist={['*']}
                         onNavigationStateChange={handleWebViewNavigationStateChange}
+                        onLoadProgress={({nativeEvent})=>setProgressNum(nativeEvent.progress)}
+                       
                         source={{html:
                             `<html>
                                 <head>

@@ -13,7 +13,7 @@ import {
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Button } from 'react-native-elements';
-import {faBars} from '@fortawesome/free-solid-svg-icons'
+import {faBars,faSignOutAlt} from '@fortawesome/free-solid-svg-icons'
 import {SIZES} from '../../constants/theme';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faHeart } from '@fortawesome/free-regular-svg-icons';  
@@ -163,7 +163,7 @@ const UserHome = ({navigation,route}) =>{
                         onPress={handleLogout}
                     >
                     <FontAwesomeIcon
-                        icon={faBars} color="white"
+                        icon={faSignOutAlt} color="white"
                         size={25}
                     
                     />
