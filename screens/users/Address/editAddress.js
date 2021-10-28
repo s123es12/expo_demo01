@@ -27,7 +27,7 @@ const WIDTH =Dimensions.get('window').width;
 
 const editAddress = ({navigation,route}) =>{
    
-    const address_id = route.params.addressId;
+    const address_id = route.params.addressId||null;
     const addressData = route.params.addressData;
     const [selectedCountryId, setSelectedCountryId] = useState();
     const [selectedZoneId, setSelectedZoneId] = useState();
