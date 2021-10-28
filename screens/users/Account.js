@@ -96,7 +96,7 @@ const Account = ({navigation,route}) =>{
                                     <QRCode value={userData.customer_id} />
                                     <Text style={{marginTop:20,fontSize:16,color:'#56585e'}}>會員編號:{userData.customer_id}</Text>
                                 </View>
-                                <View style={{flexDirection:'row',justifyContent:'space-between',paddingVertical:10,paddingHorizontal:WIDTH*0.15,alignItems:'center'}}>
+                                {/* <View style={{flexDirection:'row',justifyContent:'space-between',paddingVertical:10,paddingHorizontal:WIDTH*0.15,alignItems:'center'}}>
                                     <View style={{flexDirection:'row',alignItems:'center'}}>
                                         <FontAwesomeIcon icon={faDonate} color="#fdd952"/>
                                         <Text style={{fontWeight:'700',color:'#000',marginLeft:8}}>{userPoints}</Text>
@@ -106,7 +106,7 @@ const Account = ({navigation,route}) =>{
                                         <Text style={{color:'#c1c1c1',marginLeft:8}}>銀</Text>
                                     </View>
                                     
-                                </View>
+                                </View> */}
                             </View>
                         </View>
                     </View>

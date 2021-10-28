@@ -82,20 +82,19 @@ const PaypalApp = ({navigation,route}) =>{
             <Text style={{fontSize:30,marginBottom:20}}>已完成訂購</Text>
             <Text>您的訂單已經成功送出，我們會在第一時間進行處理！如有任何問題或意見，請 聯絡我們.感謝您的訂購！</Text>
             <View style={{alignItems:'center'}}>
-            <Button
-                buttonStyle={{
-                    padding:10,
-                    borderWidth: 0,
-                    borderRadius:20, 
-                    backgroundColor:"#d9a21b",
-                    marginTop:60,
-                    width:WIDTH*0.6
-                }}
-                title="回到首頁"
-                onPress={onSubmit}  
-            />
-                
-        </View>
+                <Button
+                    buttonStyle={{
+                        padding:10,
+                        borderWidth: 0,
+                        borderRadius:20, 
+                        backgroundColor:"#d9a21b",
+                        marginTop:60,
+                        width:WIDTH*0.6
+                    }}
+                    title="回到首頁"
+                    onPress={onSubmit}  
+                />
+            </View>
         </View>
 
        

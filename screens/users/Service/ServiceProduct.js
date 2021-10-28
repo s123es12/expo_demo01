@@ -31,14 +31,14 @@ const HEIGHT =Dimensions.get('window').height;
 
 
 const ServiceProduct = ({navigation,route}) =>{
-   
+    const newId = route.params.id;
     const [isLoading, setLoading] = useState(true);
 
     const [productInfo,setProductInfo]=useState({});
 
     const [suggestList, setSuggestList] = useState([]);
 
-    const [product_id, setProductId] = useState(route.params.id);
+    const [product_id, setProductId] = useState(newId);
 
     const [productCount, setProductCount]=useState(1);
 
@@ -124,6 +124,7 @@ const ServiceProduct = ({navigation,route}) =>{
         })
         .then(response=>response.json())
         .then((responseJson)=>{
+            console.log(responseJson);
             if(responseJson.success==1){
                
                 let new_array = responseJson.data;
@@ -142,13 +143,38 @@ const ServiceProduct = ({navigation,route}) =>{
 
     },[isLoading,product_id])
 
-    
+    const addProductOne =(productId)=>{
+       
+        //console.log(productId)
+        fetch('https://goldrich.top/api/rest/cart', {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization':'Bearer '+route.params.authorization,
+                
+            },body:JSON.stringify({
+                'product_id':productId,
+                'quantity':1
+            })
+        })
+        .then(response=>response.json())
+        .then((responseJson)=>{
+            if(responseJson.success ==1){
+              
+            }else{
+                
+            }
+            
+          
+        }).catch((err)=>console.log(err));
+    }
 
     return(
 
             <View >
 
-                {show && (
+                {/* {show && (
                     <DateTimePicker
                     testID="dateTimePicker"
                     value={new Date()}
@@ -206,7 +232,7 @@ const ServiceProduct = ({navigation,route}) =>{
                        
                     }}
                     />
-                )}
+                )} */}
                
 
 
@@ -279,10 +305,10 @@ const ServiceProduct = ({navigation,route}) =>{
                                 <Text style={{fontSize:20,fontWeight:'700'}}>${isLoading?<ActivityIndicator/>:productInfo.price.toFixed(1)}</Text>
                             </View>
                             <View style={{flexDirection:'row',justifyContent:'space-between',paddingVertical:10}}>
-                                <Text style={{fontWeight:'700'}}>預約收件時間</Text>
+                                {/* <Text style={{fontWeight:'700'}}>預約收件時間</Text> */}
                                 <Text style={{color:'#56585e'}}>{productInfo.quantity>=1?'有存貨 ('+productInfo.quantity+')':'沒有存貨'}</Text>
                             </View>
-                            <View style={{flexDirection:'row'}} >
+                            {/* <View style={{flexDirection:'row'}} >
                                 <View style={{flex:1,
                                     backgroundColor:orderDate==null?'transparent':'#cc6a3e',
                                     borderWidth:1,borderColor:orderDate==null?'#623f31':'#cc6a3e',
@@ -312,8 +338,8 @@ const ServiceProduct = ({navigation,route}) =>{
                                     
                                 
                                 </View>
-                            </View>
-                            <View style={{flexDirection:'row',alignItems:'center',paddingTop:20,paddingBottom:10,justifyContent:'space-between'}}>
+                            </View> */}
+                            <View style={{flexDirection:'row',alignItems:'center',paddingTop:0,paddingBottom:10,justifyContent:'space-between'}}>
                                 <View style={{flexDirection:'row',flex:1,alignItems:'center'}}>
                                     <Button 
                                         title="-" 
@@ -417,7 +443,7 @@ const ServiceProduct = ({navigation,route}) =>{
                                                     buttonStyle={{backgroundColor:'#623f31',color:"#000",height:20,padding:12,borderRadius:5}}
                                                     title="加入購物車"
                                                     titleStyle={{fontSize:12}}
-                                                    
+                                                    onPress={()=>addProductOne(item.product_id)}
                                                 />
                                             </View>
                                         </View>

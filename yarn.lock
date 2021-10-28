@@ -4168,7 +4168,7 @@ expo-font@~9.2.1:
 
 expo-google-app-auth@^8.2.4:
   version "8.2.4"
-  resolved "https://registry.npmjs.org/expo-google-app-auth/-/expo-google-app-auth-8.2.4.tgz"
+  resolved "https://registry.yarnpkg.com/expo-google-app-auth/-/expo-google-app-auth-8.2.4.tgz#95cf96a0a43497f957f9185b0be9efe0539f3c99"
   integrity sha512-ZMhJFimwuWAv+0tjGz28vuSIunqSoV5Fk2WIK5gGJWgkF/KksiCNLEqNKM4zHlCVAjszoBUE3MMtGUsNDn1Yvw==
   dependencies:
     expo-app-auth "~11.0.2"

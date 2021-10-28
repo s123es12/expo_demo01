@@ -48,71 +48,19 @@ const ServiceComment = ({navigation,route}) =>{
         }
     );
 
-    const productlist=[
-        {
-            id:0,
-            image:require('../../../assets/images/I01.jpeg'),
-            name:'XXXXXX',
-            price:24.0,
-            count:2
-        },
-        {   
-            id:1,
-            image:require('../../../assets/images/I01.jpeg'),
-            name:'XXXX2XX',
-            price:24.0,
-            count:2
-        },
-        {
-            id:2,
-            image:require('../../../assets/images/I01.jpeg'),
-            name:'XXXX3XX',
-            price:24.0,
-            count:2
-        },
-        {
-            id:3,
-            image:require('../../../assets/images/I01.jpeg'),
-            name:'XXXX4XX',
-            price:24.0,
-            count:2
-        },
-        {
-            id:4,
-            image:require('../../../assets/images/I01.jpeg'),
-            name:'XXXX5XX',
-            price:24.0,
-            count:2
-        },
-        {
-            id:4,
-            image:require('../../../assets/images/I01.jpeg'),
-            name:'XXXX5XX',
-            price:24.0,
-            count:2
-        },
-        {
-            id:4,
-            image:require('../../../assets/images/I01.jpeg'),
-            name:'XXXX5XX',
-            price:24.0,
-            count:2
-        }
-    ]
-    const [cartsList, setCartsList] = useState(productlist);
-
-    const cartList = [...cartsList];
+    
+    const [suggestList, setSuggestList] = useState([]);
 
     const [showSuccess,setSuccess] = useState(false);
     
-    const [commentRating, setCommentRat] = useState(null);
+    const [commentRating, setCommentRat] = useState(0);
 
     const [productId, setProductId]= useState(route.params.id);
 
     const [errorComment, setErrorComment] =useState(null);
 
     const onSubmit = value =>{
-        console.log(value);
+        //console.log(value);
         fetch('https://goldrich.top/api/rest/products/'+productId+'/review', {
             method: 'POST',
             headers: {
@@ -131,6 +79,7 @@ const ServiceComment = ({navigation,route}) =>{
             //console.log(responseJson);
             if(responseJson.success ==1){
                 console.log(responseJson);
+                setSuccess(true);
             }else{
                 console.log(responseJson);
                 setErrorComment(responseJson.error[0]);
@@ -142,7 +91,27 @@ const ServiceComment = ({navigation,route}) =>{
     }
 
     useEffect(()=>{
-        
+        // fetch('https://goldrich.top/api/rest/products', {
+        //     method: 'GET',
+        //     headers: {
+        //         Accept: 'application/json',
+        //         'Content-Type': 'application/json',
+        //         'Authorization':'Bearer '+route.params.authorization,
+                
+        //     }
+        // })
+        // .then(response=>response.json())
+        // .then((responseJson)=>{
+        //     if(responseJson.success==1){
+               
+        //         let new_array = responseJson.data;
+                
+        //         setSuggestList(new_array);
+        //         console.log(responseJson.data);
+        //     }else if(responseJson.success==0){
+
+        //     }
+        // }).catch((err)=>console.log(err))
     },[])
 
 
@@ -198,8 +167,8 @@ const ServiceComment = ({navigation,route}) =>{
                         <View style={{flexDirection:'row',justifyContent:'center',margin:30}}>
                             <View style={{alignItems:'center',flexDirection:'row'}}>
 
-                                <Rating type='custom' showRating={false} imageSize={30} fractions={1} defaultRating={0} 
-                                    ratingBackgroundColor='#b5b5b5' ratingColor='#fdd952' 
+                                <Rating type='custom' showRating={false} imageSize={30}  defaultRating={commentRating} 
+                                    ratingBackgroundColor='#b5b5b5' ratingColor='#fdd952' startingValue={0}
                                     onFinishRating={(rating)=>{setCommentRat(rating)}}
                                 />
                                 <Text style={{marginLeft:10}}>滿分</Text>
@@ -278,23 +247,40 @@ const ServiceComment = ({navigation,route}) =>{
 
 
                     </View>
-                    
+                   
                     <View style={{backgroundColor:'white',position:'absolute',height:showSuccess==true?'100%':0,width:showSuccess==true?'100%':0,margin:25,borderRadius:5,flexDirection:'column',justifyContent:'space-evenly'}}>
-                        <View style={{borderBottomWidth:1,borderBottomColor:'#d2d2d2',alignItems:'center',paddingBottom:40}}>
+                    <ScrollView>
+                        <View style={{
+                            //borderBottomWidth:1,borderBottomColor:'#d2d2d2',
+                            alignItems:'center',paddingBottom:40}}>
                             {showSuccess==true?<FontAwesomeIcon icon={faCheckCircle} size={80} color='#623f31' style={{marginTop:10,marginBottom:20}}/>:null}
                             <Text style={{color:'#623f31',fontWeight:'700',marginBottom:10}}>評論成功發佈</Text>
-                            <Text style={{color:'#56585e'}}>您可於服務資料中</Text>
+                            <Text style={{color:'#56585e'}}>請耐心等待管理員批閱，待完成後您可於服務資料中</Text>
                             <Text style={{color:'#56585e'}}>看到您的評論</Text>
+                            <View style={{alignItems:'center'}}>
+                                <Button
+                                    buttonStyle={{
+                                        padding:10,
+                                        borderWidth: 0,
+                                        borderRadius:20, 
+                                        backgroundColor:"#d9a21b",
+                                        marginTop:60,
+                                        width:WIDTH*0.6
+                                    }}
+                                    title="回到首頁"
+                                    onPress={()=>navigation.navigate('User',{authorization:route.params.authorization})}  
+                                />
+                            </View>
                         </View>
-                        <View style={{paddingBottom:25,paddingLeft:25,paddingRight:25}}>
+                        {/* <View style={{paddingBottom:25,paddingLeft:25,paddingRight:25}}>
                             <Text style={{fontWeight:'700',paddingTop:16,paddingBottom:8}}>您可能感興趣</Text>
                             <ScrollView horizontal>
-                                {cartList.map((item,index)=>{
+                            {suggestList.map((item,index)=>{
                                     return (
-                                    <TouchableOpacity key={item+index} >
-                                        <View style={[styles.shadowProduct,{borderRadius:8,padding:10,margin:5,width:WIDTH*0.4,height:HEIGHT*0.3,backgroundColor:'#fff'}]}>
+                                    <TouchableOpacity key={item+index} onPress={()=>navigation.navigate('ServiceProduct',{id:suggestList[inde].product_id,authorization:route.params.authorization})}>
+                                        <View style={{borderRadius:8,padding:10,margin:5,marginLeft:0,width:WIDTH*0.4,height:HEIGHT*0.3,backgroundColor:'white'}}>
                                         
-                                            <Image source={item.image} style={{height:'70%',width:'100%'}} resizeMode='cover'/>
+                                            <Image source={{uri:item.image}} style={{height:'70%',width:'100%'}} resizeMode='cover'/>
 
                                             <View style={{flexDirection:'row',justifyContent:'space-between',alignItems:'center',paddingVertical:5}}>
                                                 <Text>{item.name}</Text>
@@ -307,21 +293,17 @@ const ServiceComment = ({navigation,route}) =>{
                                             </View>
                                             <View style={{flexDirection:'row',justifyContent:'space-between',alignItems:'center',paddingVertical:5}}>
                                                 <Text style={{color:'#cc6a3e'}}>${item.price.toFixed(1)}</Text>
-                                                <Button 
-                                                    buttonStyle={{backgroundColor:'#623f31',color:"#000",height:20,padding:12,borderRadius:5}}
-                                                    title="加入購物車"
-                                                    titleStyle={{fontSize:12}}
-                                                    
-                                                />
+                                                
                                             </View>
                                         </View>
                                     </TouchableOpacity>
                                     )
                                 })}
                             </ScrollView>
-                        </View>
+                        </View> */}
+                        </ScrollView>
                     </View>
-                    
+                   
                     
                 </View>
 

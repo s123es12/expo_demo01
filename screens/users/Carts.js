@@ -45,8 +45,8 @@ const Carts = ({navigation,route}) =>{
     const [isModalVisible, setModalVisible] = useState(false);
     const [isDiscountVisible,setDiscountVisible]=useState(false);
 
-
-
+    const [canClick,setCanClick]=useState(false);
+    const [update,setUpdate]=useState(false);
     const handleCoupon = (couponName) =>{
         fetch('https://goldrich.top/api/rest/coupon', {
             method: 'POST',
@@ -123,13 +123,13 @@ const Carts = ({navigation,route}) =>{
         .then((responseJson)=>{
             if(responseJson.success==1){
                //console.log(responseJson);
+               setUpdate(!update);
                
-                
             }else if(responseJson.success==0){
 
             }
         }).catch((err)=>console.log(err))
-        .finally(()=>{setCartsReload(!cartsReload)})
+        .finally(()=>{setCartsReload(!cartsReload);setUpdate(!update);})
         
     }
    
@@ -151,7 +151,7 @@ const Carts = ({navigation,route}) =>{
         .then((responseJson)=>{
             if(responseJson.success==1){
                 //console.log(responseJson);
-            
+               
             }else if(responseJson.success==0){
 
             }
@@ -175,7 +175,7 @@ const Carts = ({navigation,route}) =>{
         .then((responseJson)=>{
             if(responseJson.success==1){
                 //console.log(responseJson);
-            
+                
             }else if(responseJson.success==0){
 
             }
@@ -198,9 +198,12 @@ const Carts = ({navigation,route}) =>{
             if(responseJson.success==1){
                //console.log(responseJson);
                setCartsList(responseJson.data);
+                
                if(responseJson.data.cart_count_products==0 || responseJson.data.length==0){
                 showDelModal(false);
+                
                }else{
+
                     if(responseJson.data.totals.length&&responseJson.data.totals.length==3){
                         //console.log(responseJson.data.totals[1].value);
                         let result = ''+responseJson.data.totals[1].value;
@@ -210,6 +213,7 @@ const Carts = ({navigation,route}) =>{
                     }else{
                         
                     }
+                    
                }
                
                
@@ -219,7 +223,7 @@ const Carts = ({navigation,route}) =>{
         }).catch((err)=>console.log(err))
         .finally(()=>{setLoading(false)});
 
-    },[isLoading,couponNumber,isVisible,cartsReload])
+    },[isLoading,couponNumber,isVisible,cartsReload,update])
 
     useEffect(()=>{
         if(isVisible){
@@ -235,9 +239,10 @@ const Carts = ({navigation,route}) =>{
             .then(response=>response.json())
             .then((responseJson)=>{
                 if(responseJson.success==1){
-               // console.log(responseJson);
+               //console.log(responseJson.data);
                 setCartsList(responseJson.data);
                 //console.log(cartsList);
+                
                 }else if(responseJson.success==0){
 
                 }
@@ -433,16 +438,29 @@ const Carts = ({navigation,route}) =>{
                         </Text>
                         <Text style={{alignItems:'flex-end',color:'#fff',fontWeight:'700',fontSize:17}}>HKD$ {isLoading?<ActivityIndicator/>:cartsList.total_raw?cartsList.total_raw.toFixed(1):0}</Text>
                     </View>
-                    <View style={{height:50,flex:1,backgroundColor:"#623f31",borderTopRightRadius:10}}>
-                        <TouchableOpacity style={{flex:1,justifyContent:'center'}} onPress={()=>{
-                                setTimeout(()=>
-                                    navigation.navigate('PayAddress',{authorization:route.params.authorization})
-                                ,1000);
-                                
-                            }}>
-                            <Text style={{alignSelf:'center',color:'#fff',fontWeight:'700',fontSize:17}}>前往結賬</Text>
-                        </TouchableOpacity>
-                    </View>
+                   
+                        {
+                           cartsList.products&&cartsList.products.length>0?
+                            <View style={{height:50,flex:1,backgroundColor:"#623f31",borderTopRightRadius:10}}>
+                            <TouchableOpacity 
+                                style={{flex:1,justifyContent:'center'}} onPress={()=>{
+                                    setTimeout(()=>
+                                        navigation.navigate('PayAddress',{authorization:route.params.authorization})
+                                    ,1000);
+                                }}>
+                                <Text style={{alignSelf:'center',color:'#fff',fontWeight:'700',fontSize:17}}>前往結賬</Text>
+                            </TouchableOpacity>
+                            </View>
+                        :
+                            <View style={{height:50,flex:1,backgroundColor:"#cfc5c1",borderTopRightRadius:10}}>
+                                <View style={{flex:1,justifyContent:'center'}}>
+                                    
+                                    <Text style={{alignSelf:'center',color:'#7f7f7f',fontWeight:'700',fontSize:17}}>前往結賬</Text>
+                                </View>
+                            </View>
+                        }
+                        
+                   
                 </View>
          
             </View>
