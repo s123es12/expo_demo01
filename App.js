@@ -38,6 +38,10 @@ import PayAddress from "./screens/users/Payment/PayAddress";
 import PayDelivery from "./screens/users/Payment/PayDelivery";
 import PayGateway from "./screens/users/Payment/PayGateway";
 import PaypalApp from "./screens/users/Payment/PaypalApp";
+import PaymentAddressList from "./screens/users/Payment/PaymentAddressList";
+
+
+
 const theme={
   ...DefaultTheme,
   colors:{
@@ -220,7 +224,11 @@ const App =({navigation})=>{
           component={PaypalApp}
           options={{headerShown:false}}
         />
-
+        <Stack.Screen 
+          name="PaymentAddressList"
+          component={PaymentAddressList}
+          options={{headerShown:false}}
+        />
 
         <Stack.Screen 
           name="Home"

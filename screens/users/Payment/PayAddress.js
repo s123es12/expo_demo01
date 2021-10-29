@@ -592,7 +592,7 @@ const PayAddress = ({navigation,route}) =>{
                                     <Text style={styles.inputTitle}>地址1</Text>
 
                                     <View>
-                                        <TouchableOpacity style={{flexDirection:'row'}}>
+                                        <TouchableOpacity style={{flexDirection:'row'}} onPress={()=>navigation.navigate('PaymentAddressList',{authorization:route.params.authorization,addressType:'PAYMENT'})}>
                                             <FontAwesomeIcon icon={faMapMarkedAlt} size={20} color="#623f31" />
                                             <Text style={{color:"#623f31",marginLeft:5,fontSize:16,fontWeight:"bold"}}>地址簿</Text>
                                         </TouchableOpacity>
@@ -773,7 +773,7 @@ const PayAddress = ({navigation,route}) =>{
                                     <Text style={styles.inputTitle}>地址1</Text>
 
                                     <View>
-                                        <TouchableOpacity style={{flexDirection:'row'}}>
+                                        <TouchableOpacity style={{flexDirection:'row'}} onPress={()=>navigation.navigate('PaymentAddressList',{authorization:route.params.authorization,addressType:'SHIPPING'})}>
                                             <FontAwesomeIcon icon={faMapMarkedAlt} size={20} color="#623f31" />
                                             <Text style={{color:"#623f31",marginLeft:5,fontSize:16,fontWeight:"bold"}}>地址簿</Text>
                                         </TouchableOpacity>
