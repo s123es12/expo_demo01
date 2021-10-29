@@ -26,7 +26,17 @@ const HEIGHT =Dimensions.get('window').height;
 
 const PayAddress = ({navigation,route}) =>{
  
-    const [defaultAdd, setDefaultAdd] = useState({});
+    const [defaultAdd, setDefaultAdd] = useState({
+        lastname:'',
+        firstname:'',
+        city:'',
+        country_id:"",
+        zone_id:'',
+        address1:'',
+        address2:'',
+        postcode:'',
+        company:''
+    });
     const [existAdd, setExistAdd]=useState({})
     const [selectedCountryId, setSelectedCountryId] = useState();
     const [selectedZoneId, setSelectedZoneId] = useState();
@@ -92,7 +102,7 @@ const PayAddress = ({navigation,route}) =>{
             
             }).catch((err)=>console.log(err));
         }else{
-
+            
             fetch('https://goldrich.top/api/rest/paymentaddress', {
                 method: 'POST',
                 headers: {
@@ -141,26 +151,29 @@ const PayAddress = ({navigation,route}) =>{
             if(responseJson.success ==1){
                 let isFoundSame = false;
                 let found_Id ;
-                responseJson.data.addresses.map((item,index)=>{
-                    if(
-                        recipientAdd.lastname==item.lastname&
-                        recipientAdd.firstname==item.firstname&
-                        recipientAdd.city==item.city&
-                        recipientAdd.country_id==item.country_id&
-                        recipientAdd.zone_id==item.zone_id&
-                        recipientAdd.address1==item.address_1&
-                        recipientAdd.address2==item.address_2&
-                        recipientAdd.postcode==item.postcode&
-                        recipientAdd.company==item.company
-                    )
-                    {
-                        isFoundSame = true;
-                        found_Id = item.address_id;
-                        //console.log("same found 1",item);
-                    }else{
-                        isFoundSame = false;
-                    }
-               })
+                if(responseJson.data.length>0){
+                    responseJson.data.addresses.map((item,index)=>{
+                        if(
+                            recipientAdd.lastname==item.lastname&
+                            recipientAdd.firstname==item.firstname&
+                            recipientAdd.city==item.city&
+                            recipientAdd.country_id==item.country_id&
+                            recipientAdd.zone_id==item.zone_id&
+                            recipientAdd.address1==item.address_1&
+                            recipientAdd.address2==item.address_2&
+                            recipientAdd.postcode==item.postcode&
+                            recipientAdd.company==item.company
+                        )
+                        {
+                            isFoundSame = true;
+                            found_Id = item.address_id;
+                            //console.log("same found 1",item);
+                        }else{
+                            isFoundSame = false;
+                        }
+                   })
+                }
+               
 
                 if(isFoundSame){
                     fetch('https://goldrich.top/api/rest/shippingaddress/existing', {
@@ -237,11 +250,7 @@ const PayAddress = ({navigation,route}) =>{
             navigation.navigate('PayDelivery',{authorization:route.params.authorization});
         }},1000)
     }
-    useEffect(()=>{
-        if(paymentSuccess ==true && shippingSuccess ==true){
-            navigation.navigate('PayDelivery',{authorization:route.params.authorization});
-        }
-    },[checkBtn])
+    
 
     useEffect(()=>{
         
@@ -260,8 +269,32 @@ const PayAddress = ({navigation,route}) =>{
             if(responseJson.success ==1){
                 let array = responseJson.data.addresses;
                 let defaultAddress = array.filter((item,index)=>{
-                    return item.default ==true;
+                    return item.default ==true?item:{ 
+                        lastname:'',
+                        firstname:'',
+                        city:'',
+                        country_id:"",
+                        zone_id:'',
+                        address1:'',
+                        address2:'',
+                        postcode:'',
+                        company:''
+                    };
                 })
+                if(defaultAddress==null){
+                    defaultAddress={ 
+                        lastname:'',
+                        firstname:'',
+                        city:'',
+                        country_id:"",
+                        zone_id:'',
+                        address1:'',
+                        address2:'',
+                        postcode:'',
+                        company:''
+                    }
+
+                }
                //console.log(defaultAddress);
                 setDefaultAdd(defaultAddress[0]);
                 setExistAdd(defaultAddress[0]);
@@ -290,7 +323,7 @@ const PayAddress = ({navigation,route}) =>{
         .then((responseJson)=>{
             //console.log(responseJson);
             if(responseJson.success ==1){
-               
+               setDefaultAdd(responseJson.data.addresses[0]);
             }else if(responseJson.success==0){
 
             }
@@ -317,6 +350,10 @@ const PayAddress = ({navigation,route}) =>{
                 
             }
         }).catch((err)=>console.log(err))
+        // if(defaultAdd.lastname){}else{
+        //     navigation.goBack();
+        //     console.log('if(defaultAdd.lastname)');
+        // }
     },[])
 
 

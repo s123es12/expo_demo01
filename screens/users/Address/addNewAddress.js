@@ -92,7 +92,7 @@ const addNewAddress = ({navigation,route}) =>{
             })
             .then(response=>response.json())
             .then((responseJson)=>{
-                //console.log(responseJson);
+                console.log(responseJson);
                 if(responseJson.success==1){
                   
                 }else if(responseJson.success==0){

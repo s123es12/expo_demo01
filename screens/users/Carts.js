@@ -9,7 +9,8 @@ import {
     StyleSheet,
     Dimensions,
     ScrollView,
-    TextInput
+    TextInput,
+    Alert
 } from 'react-native';
 import {faBars,faPeopleArrows,faMicrophone, faLiraSign,faTimes,faCheckCircle,faUndo} from '@fortawesome/free-solid-svg-icons';
 import {useIsFocused} from "@react-navigation/native";
@@ -224,6 +225,46 @@ const Carts = ({navigation,route}) =>{
         .finally(()=>{setLoading(false)});
 
     },[isLoading,couponNumber,isVisible,cartsReload,update])
+
+    const handlePayment =() =>{
+        fetch('https://goldrich.top/api/rest/account/address', {
+            method: 'GET',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization':'Bearer '+route.params.authorization,
+                
+            }
+        })
+        .then(response=>response.json())
+        .then((responseJson)=>{
+            console.log(responseJson);
+            if(responseJson.success ==1){
+                if(responseJson.data.addresses.length>=1){
+                    setTimeout(()=>
+                        navigation.navigate('PayAddress',{authorization:route.params.authorization})
+                    ,1000); 
+                }else{
+                    Alert.alert(
+                        '請新增最少一個個人地址再進行結賬程序',
+                        '',
+                        [
+                            {
+                              text: 'OK',
+                              onPress: () => navigation.navigate('addNewAddress',{authorization:route.params.authorization}),
+                              style: 'cancel',
+                            },
+                        ]
+                    );
+                }
+            }else if(responseJson.success==0){
+
+            }
+          
+        }).catch((err)=>console.log(err))
+        .finally(()=>setLoadDefault(false))
+    }
+
 
     useEffect(()=>{
         if(isVisible){
@@ -443,11 +484,9 @@ const Carts = ({navigation,route}) =>{
                            cartsList.products&&cartsList.products.length>0?
                             <View style={{height:50,flex:1,backgroundColor:"#623f31",borderTopRightRadius:10}}>
                             <TouchableOpacity 
-                                style={{flex:1,justifyContent:'center'}} onPress={()=>{
-                                    setTimeout(()=>
-                                        navigation.navigate('PayAddress',{authorization:route.params.authorization})
-                                    ,1000);
-                                }}>
+                                style={{flex:1,justifyContent:'center'}} onPress={handlePayment}>
+                                    
+                                
                                 <Text style={{alignSelf:'center',color:'#fff',fontWeight:'700',fontSize:17}}>前往結賬</Text>
                             </TouchableOpacity>
                             </View>

@@ -55,6 +55,7 @@ const Address = ({navigation,route}) =>{
                 setError(responseJson.error);
             }
         }).catch((err)=>console.log(err))
+        .finally(()=>setChangeList(!changeList))
     }
 
 
@@ -70,7 +71,7 @@ const Address = ({navigation,route}) =>{
         })
         .then(response=>response.json())
         .then((responseJson)=>{
-            //console.log(responseJson);
+            console.log(responseJson);
             if(responseJson.success ==1){
                 let new_list = [...responseJson.data.addresses];
                 for(var i=0;i<new_list.length;i++){
@@ -78,6 +79,7 @@ const Address = ({navigation,route}) =>{
                 }
                 setAddressList(new_list);
                 //console.log(new_list);
+                
             }else if(responseJson.success==0){
 
             }
@@ -87,7 +89,7 @@ const Address = ({navigation,route}) =>{
 
     return(
         <View >
-<ScrollView>
+        <ScrollView>
            
             <View style={{
                 backgroundColor:"#cc6a3e",
@@ -131,11 +133,17 @@ const Address = ({navigation,route}) =>{
                                                 </TouchableOpacity>
                                             </View>
                                             <View style={{marginHorizontal:25,marginVertical:5,flexDirection:'row',justifyContent:'space-between'}}>
-                                                <Text style={styles.itemContent}></Text>
+                                                <Text style={styles.itemContent}>{item.address_1}</Text>
                                                 <Text style={styles.itemContent}>{item.email?item.email:null}</Text>
                                             </View>
                                             <View style={{marginBottom:10,marginHorizontal:25,marginVertical:5,flexDirection:'row',justifyContent:'space-between',alignItems:'center'}}>
                                                 <Text style={styles.itemAddress}>{item.zone}</Text>
+                                                {addressList.length==1? 
+                                                <View>
+                                                    <FontAwesomeIcon icon={faTrashAlt} color='#c3c3c3'/>
+                                                </View>
+                                               :
+
                                                 <TouchableOpacity>
                                                     <FontAwesomeIcon icon={faTrashAlt} onPress={()=>{
                                                         let copy_list = [...addressList];
@@ -143,6 +151,7 @@ const Address = ({navigation,route}) =>{
                                                         setAddressList(copy_list);
                                                     }}/>
                                                 </TouchableOpacity>
+                                                }
                                             </View>
                                             
                                             {

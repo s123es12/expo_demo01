@@ -9,7 +9,8 @@ import {
     StyleSheet,
     Dimensions,
     ScrollView,
-    TextInput
+    TextInput,
+    Alert
 } from 'react-native';
 import {faBars,faPeopleArrows,faMicrophone, faLiraSign,faTimes,faCheckCircle,faUndo,faChevronRight,
 faChevronLeft} from '@fortawesome/free-solid-svg-icons'
@@ -19,6 +20,9 @@ import { faHeart } from '@fortawesome/free-regular-svg-icons';
 import Modal from "react-native-modal";
 import { Button,Avatar,ListItem } from 'react-native-elements';
 import QRCode from 'react-native-qrcode-svg';
+
+
+
 
 const WIDTH =Dimensions.get('window').width;
 
@@ -30,6 +34,7 @@ const PersonInfo = ({navigation,route}) =>{
     //console.log(user);
     const [passwordError, setPasswordError] = useState([]);
     const [changeError, setChagneError] =useState([]);
+  
 
     const [userInfo,setUserInfo] = useState({
         lastname:user.lastname,
@@ -67,7 +72,7 @@ const PersonInfo = ({navigation,route}) =>{
             .then((responseJson)=>{
                 //console.log(responseJson);
                 if(responseJson.success==1){
-                  
+                   
                 }else if(responseJson.success==0){
                     setChagneError(responseJson.error[0]);
                 }
@@ -90,9 +95,19 @@ const PersonInfo = ({navigation,route}) =>{
             })
             .then(response=>response.json())
             .then((responseJson)=>{
-                //console.log(responseJson);
+                console.log(responseJson);
                 if(responseJson.success==1){
-                  
+                    Alert.alert(
+                        '個人資料已更新',
+                        '',
+                        [
+                            {
+                              text: 'OK',
+                              onPress: () => navigation.goBack(),
+                              style: 'cancel',
+                            },
+                        ]
+                      );
                 }else if(responseJson.success==0){
                     setPasswordError(responseJson.error);
                 }
@@ -104,7 +119,6 @@ const PersonInfo = ({navigation,route}) =>{
     }
 
     
-    
 
     useEffect(()=>{
         setPasswordError([]);
@@ -113,6 +127,7 @@ const PersonInfo = ({navigation,route}) =>{
 
     return(
             <View >
+                
             <ScrollView>
            
             <View style={{
