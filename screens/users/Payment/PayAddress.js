@@ -32,8 +32,8 @@ const PayAddress = ({navigation,route}) =>{
         city:'',
         country_id:"",
         zone_id:'',
-        address1:'',
-        address2:'',
+        address_1:'',
+        address_2:'',
         postcode:'',
         company:''
     });
@@ -49,13 +49,13 @@ const PayAddress = ({navigation,route}) =>{
 
 
     const [recipientAdd, setRecipientAdd] = useState({
-        lastname:'test',
-        firstname:'test',
-        city:'test',
-        country_id:"96",
+        lastname:'',
+        firstname:'',
+        city:'',
+        country_id:"",
         zone_id:'',
-        address1:'test',
-        address2:'',
+        address_1:'',
+        address_2:'',
         postcode:'',
         company:''
     });
@@ -71,184 +71,34 @@ const PayAddress = ({navigation,route}) =>{
     const [shippingSuccess,setShippingSuccess] = useState(false);
     const [checkBtn, setCheckBtn]=useState(false);
 
+    const [selectPayment,setSelectPayment]=useState(false);
+    const [selectReadd,setSelectReadd]=useState(false);
+
+    const changeAdd = (add)=>{
+        setSelectPayment(true);
+        setDefaultAdd(add);
+        
+        setSelectedCountryId(add.country);
+        setSelectedCountry(add.country_id);
+        setSelectedZoneId(add.zone);
+
+    }
+    const changeAdd2 = (add)=>{
+        setSelectReadd(true);
+        setRecipientAdd(add);
+        setSelectedCountryId2(add.country);
+        setSelectedCountry2(add.country_id);
+        setSelectedZoneId2(add.zone);
+
+    }
+
+
     const onSubmit = data =>{
         //navigation.navigate('PayDelivery',{authorization:route.params.authorization});
         //console.log('defaultAdd: ',defaultAdd);
         //console.log('recipientAdd: ',recipientAdd);
 
-        
-
-        if(defaultAdd == existAdd){
-            fetch('https://goldrich.top/api/rest/paymentaddress/existing', {
-                method: 'POST',
-                headers: {
-                    Accept: 'application/json',
-                    'Content-Type': 'application/json',
-                    'Authorization':'Bearer '+route.params.authorization,
-                    
-                },body:JSON.stringify({
-                    "address_id": existAdd.address_id
-                })
-            })
-            .then(response=>response.json())
-            .then((responseJson)=>{
-                //console.log(responseJson);
-                if(responseJson.success ==1){
-                    console.log('Set existing payment address to order');
-                    setPaymentSuccess(true);
-                }else if(responseJson.success==0){
-
-                }
-            
-            }).catch((err)=>console.log(err));
-        }else{
-            
-            fetch('https://goldrich.top/api/rest/paymentaddress', {
-                method: 'POST',
-                headers: {
-                    Accept: 'application/json',
-                    'Content-Type': 'application/json',
-                    'Authorization':'Bearer '+route.params.authorization,
-                    
-                },body:JSON.stringify({
-                    "firstname": defaultAdd.firstname,
-                    "lastname": defaultAdd.lastname,
-                    "city": defaultAdd.city,
-                    "address_1": defaultAdd.address_1,
-                    "address_2": defaultAdd.address_2,
-                    "country_id": defaultAdd.country_id,
-                    "postcode": defaultAdd.postcode,
-                    "zone_id": defaultAdd.zone_id,
-                    "company": defaultAdd.company,
-                })
-            })
-            .then(response=>response.json())
-            .then((responseJson)=>{
-                //console.log(responseJson);
-                if(responseJson.success ==1){
-                   console.log('Add new payment address to order');
-                   setPaymentError([]);
-                   setPaymentSuccess(true);
-                }else if(responseJson.success==0){
-                    setPaymentError(responseJson.error);
-                }
-              
-            }).catch((err)=>console.log(err));
-        }
-
-        fetch('https://goldrich.top/api/rest/shippingaddress', {
-            method: 'GET',
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-                'Authorization':'Bearer '+route.params.authorization,
-                
-            }
-        })
-        .then(response=>response.json())
-        .then((responseJson)=>{
-            //console.log(responseJson);
-            if(responseJson.success ==1){
-                let isFoundSame = false;
-                let found_Id ;
-                if(responseJson.data.length>0){
-                    responseJson.data.addresses.map((item,index)=>{
-                        if(
-                            recipientAdd.lastname==item.lastname&
-                            recipientAdd.firstname==item.firstname&
-                            recipientAdd.city==item.city&
-                            recipientAdd.country_id==item.country_id&
-                            recipientAdd.zone_id==item.zone_id&
-                            recipientAdd.address1==item.address_1&
-                            recipientAdd.address2==item.address_2&
-                            recipientAdd.postcode==item.postcode&
-                            recipientAdd.company==item.company
-                        )
-                        {
-                            isFoundSame = true;
-                            found_Id = item.address_id;
-                            //console.log("same found 1",item);
-                        }else{
-                            isFoundSame = false;
-                        }
-                   })
-                }
-               
-
-                if(isFoundSame){
-                    fetch('https://goldrich.top/api/rest/shippingaddress/existing', {
-                        method: 'POST',
-                        headers: {
-                            Accept: 'application/json',
-                            'Content-Type': 'application/json',
-                            'Authorization':'Bearer '+route.params.authorization,
-                            
-                        },body:JSON.stringify({
-                            "address_id": found_Id
-                        })
-                    })
-                    .then(response=>response.json())
-                    .then((responseJson)=>{
-                        //console.log(responseJson);
-                        if(responseJson.success ==1){
-                            console.log('Set existing shipping address to order');
-                            setShippingError([]);
-                            setShippingSuccess(true);
-                        }else if(responseJson.success==0){
-                            setShippingError(responseJson.error);
-                        }
-                    
-                    }).catch((err)=>console.log(err));
-                }else{
-                    fetch('https://goldrich.top/api/rest/shippingaddress', {
-                        method: 'POST',
-                        headers: {
-                            Accept: 'application/json',
-                            'Content-Type': 'application/json',
-                            'Authorization':'Bearer '+route.params.authorization,
-                            
-                        },body:JSON.stringify({
-                            "firstname": recipientAdd.firstname,
-                            "lastname": recipientAdd.lastname,
-                            "city": recipientAdd.city,
-                            "address_1": recipientAdd.address1,
-                            "address_2": recipientAdd.address2,
-                            "country_id": recipientAdd.country_id,
-                            "postcode": recipientAdd.postcode,
-                            "zone_id": recipientAdd.zone_id,
-                            "company": recipientAdd.company,
-                        })
-                    })
-                    .then(response=>response.json())
-                    .then((responseJson)=>{
-                        //console.log(responseJson);
-                        if(responseJson.success ==1){
-                            console.log('Add new shipping address to order');
-                            setShippingError([]);
-                            setShippingSuccess(true);
-                            
-                        }else if(responseJson.success==0){
-                            setShippingError(responseJson.error);
-                        }
-                    
-                    }).catch((err)=>console.log(err));
-                }
-
-
-
-            }else if(responseJson.success==0){
-                
-            }
-          
-        }).catch((err)=>console.log(err))
-        .finally(()=>{
-            setCheckBtn(!checkBtn);
-            
-        });
-
-        setTimeout(()=>{if(paymentSuccess ==true && shippingSuccess ==true){
-            navigation.navigate('PayDelivery',{authorization:route.params.authorization});
-        }},1000)
+        setTimeout(()=>{navigation.navigate('PayDelivery',{authorization:route.params.authorization})},1000);
     }
     
 
@@ -296,7 +146,7 @@ const PayAddress = ({navigation,route}) =>{
 
                 }
                //console.log(defaultAddress);
-                setDefaultAdd(defaultAddress[0]);
+                //setDefaultAdd(defaultAddress[0]);
                 setExistAdd(defaultAddress[0]);
                 //console.log(defaultAdd);
                 setSelectedCountryId(defaultAddress[0].country);
@@ -323,7 +173,7 @@ const PayAddress = ({navigation,route}) =>{
         .then((responseJson)=>{
             //console.log(responseJson);
             if(responseJson.success ==1){
-               setDefaultAdd(responseJson.data.addresses[0]);
+               //setDefaultAdd(responseJson.data.addresses[0]);
             }else if(responseJson.success==0){
 
             }
@@ -592,7 +442,7 @@ const PayAddress = ({navigation,route}) =>{
                                     <Text style={styles.inputTitle}>地址1</Text>
 
                                     <View>
-                                        <TouchableOpacity style={{flexDirection:'row'}} onPress={()=>navigation.navigate('PaymentAddressList',{authorization:route.params.authorization,addressType:'PAYMENT'})}>
+                                        <TouchableOpacity style={{flexDirection:'row'}} onPress={()=>navigation.navigate('PaymentAddressList',{authorization:route.params.authorization,addressType:'PAYMENT',changeAdd:changeAdd})}>
                                             <FontAwesomeIcon icon={faMapMarkedAlt} size={20} color="#623f31" />
                                             <Text style={{color:"#623f31",marginLeft:5,fontSize:16,fontWeight:"bold"}}>地址簿</Text>
                                         </TouchableOpacity>
@@ -773,7 +623,7 @@ const PayAddress = ({navigation,route}) =>{
                                     <Text style={styles.inputTitle}>地址1</Text>
 
                                     <View>
-                                        <TouchableOpacity style={{flexDirection:'row'}} onPress={()=>navigation.navigate('PaymentAddressList',{authorization:route.params.authorization,addressType:'SHIPPING'})}>
+                                        <TouchableOpacity style={{flexDirection:'row'}} onPress={()=>navigation.navigate('PaymentAddressList',{authorization:route.params.authorization,addressType:'SHIPPING',changeAdd2:changeAdd2})}>
                                             <FontAwesomeIcon icon={faMapMarkedAlt} size={20} color="#623f31" />
                                             <Text style={{color:"#623f31",marginLeft:5,fontSize:16,fontWeight:"bold"}}>地址簿</Text>
                                         </TouchableOpacity>
@@ -782,7 +632,7 @@ const PayAddress = ({navigation,route}) =>{
                                 </View>
                                     <TextInput 
                                         style={styles.inputs}
-                                        value={recipientAdd.address1}
+                                        value={recipientAdd.address_1}
                                         onChangeText={(value)=>setRecipientAdd({...recipientAdd,address1:value})}
                                         placeholder="輸入收件人地址1"
                                     />
@@ -791,7 +641,7 @@ const PayAddress = ({navigation,route}) =>{
                                 <Text style={styles.inputTitle}>地址2</Text>
                                 <TextInput 
                                     style={styles.inputs}
-                                    value={recipientAdd.address2}
+                                    value={recipientAdd.address_2}
                                     onChangeText={(value)=>setRecipientAdd({...recipientAdd,address2:value})}
                                     placeholder="輸入收件人地址2"
                                 />
@@ -806,6 +656,7 @@ const PayAddress = ({navigation,route}) =>{
                         
                         <View style={{alignItems:'center'}}>
                             <Button
+                                disabled={selectPayment&&selectReadd?false:true}
                                 buttonStyle={{
                                     padding:10,
                                     borderWidth: 0,

@@ -188,7 +188,7 @@ const PayDelivery = ({navigation,route}) =>{
         })
         .then(response=>response.json())
         .then((responseJson)=>{
-            //console.log(responseJson);
+            console.log(responseJson);
             if(responseJson.success ==1){
                 if(responseJson.data.address_id==''||responseJson.data.address_id==null){
 
@@ -238,7 +238,7 @@ const PayDelivery = ({navigation,route}) =>{
         })
         .then(response=>response.json())
         .then((responseJson)=>{
-          
+            console.log(responseJson);
             if(responseJson.success ==1){
                 fetch('https://goldrich.top/api/rest/shippingmethods', {
                     method: 'POST',
@@ -389,11 +389,11 @@ const PayDelivery = ({navigation,route}) =>{
                                             <Text style={styles.itemAddressName}>{paymentAddress.firstname} {paymentAddress.lastname}</Text>
                                         </View>
                                         
-                                        <TouchableOpacity>
+                                        {/* <TouchableOpacity>
                                             <FontAwesomeIcon icon={faPen} color="#d9a21b"
                                                 onPress={()=>navigation.navigate('editAddress')}
                                             />
-                                        </TouchableOpacity>
+                                        </TouchableOpacity> */}
                                     </View>
                                     <View style={{marginVertical:5,flexDirection:'row',justifyContent:'space-between'}}>
                                         <Text style={[styles.itemContent,{}]}>{paymentAddress.zone}</Text>
@@ -414,11 +414,11 @@ const PayDelivery = ({navigation,route}) =>{
                                             <Text style={styles.itemAddressName}>{shippingAddress.firstname} {shippingAddress.lastname}</Text>
                                         </View>
                                         
-                                        <TouchableOpacity>
+                                        {/* <TouchableOpacity>
                                             <FontAwesomeIcon icon={faPen} color="#d9a21b"
                                                 onPress={()=>navigation.navigate('editAddress')}
                                             />
-                                        </TouchableOpacity>
+                                        </TouchableOpacity>  */}
                                     </View>
                                     <View style={{marginVertical:5,flexDirection:'row',justifyContent:'space-between'}}>
                                         <Text style={[styles.itemContent,{}]}>{shippingAddress.zone}</Text>
@@ -430,7 +430,9 @@ const PayDelivery = ({navigation,route}) =>{
                                     </View>
                                 </View>
                             
-                            }
+                            } 
+                           
+                            
 
                         </View>
 

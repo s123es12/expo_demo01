@@ -53,10 +53,66 @@ const PaymentAddressList = ({navigation,route}) =>{
         .finally(()=>setChangeList(!changeList))
     }
 
+    const handleBack =(index,item)=>{
+        navigation.goBack();
+
+        if(type=='PAYMENT'){
+            route.params.changeAdd(item,type);
+            fetch('https://goldrich.top/api/rest/paymentaddress/existing', {
+                method: 'POST',
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                    'Authorization':'Bearer '+route.params.authorization,
+                    
+                },body:JSON.stringify({
+                    "address_id": item.address_id
+                })
+            })
+            .then(response=>response.json())
+            .then((responseJson)=>{
+                //console.log(responseJson);
+                if(responseJson.success ==1){
+                
+                    
+                }else if(responseJson.success==0){
+
+                }
+            
+            }).catch((err)=>console.log(err));
+        }else{
+            route.params.changeAdd2(item,type);
+            fetch('https://goldrich.top/api/rest/shippingaddress/existing', {
+                method: 'POST',
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                    'Authorization':'Bearer '+route.params.authorization,
+                    
+                },body:JSON.stringify({
+                    "address_id": item.address_id
+                })
+            })
+            .then(response=>response.json())
+            .then((responseJson)=>{
+                //console.log(responseJson);
+                if(responseJson.success ==1){
+                
+                    
+                }else if(responseJson.success==0){
+
+                }
+            
+            }).catch((err)=>console.log(err));
+        }
+
+        
+        
+    }
 
     useEffect(()=>{
 
-        console.log(type);
+        //console.log(type);
 
 
         fetch('https://goldrich.top/api/rest/account/address', {
@@ -120,7 +176,7 @@ const PaymentAddressList = ({navigation,route}) =>{
                         <ScrollView>
                             {addressList.map((item,index)=>{
                                 return ( 
-                                <TouchableOpacity key={item+index}>
+                                <TouchableOpacity key={item+index} onPress={()=>handleBack(index,item)}>
                                     <View  style={{margin:10,flex:1,borderRadius:10,backgroundColor:'white'}}>
                                         <View>
 

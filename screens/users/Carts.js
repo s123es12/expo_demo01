@@ -262,7 +262,7 @@ const Carts = ({navigation,route}) =>{
             }
           
         }).catch((err)=>console.log(err))
-        .finally(()=>setLoadDefault(false))
+        
     }
 
 

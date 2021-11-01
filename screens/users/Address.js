@@ -71,7 +71,7 @@ const Address = ({navigation,route}) =>{
         })
         .then(response=>response.json())
         .then((responseJson)=>{
-            console.log(responseJson);
+            //console.log(responseJson);
             if(responseJson.success ==1){
                 let new_list = [...responseJson.data.addresses];
                 for(var i=0;i<new_list.length;i++){
@@ -133,7 +133,7 @@ const Address = ({navigation,route}) =>{
                                                 </TouchableOpacity>
                                             </View>
                                             <View style={{marginHorizontal:25,marginVertical:5,flexDirection:'row',justifyContent:'space-between'}}>
-                                                <Text style={styles.itemContent}>{item.address_1}</Text>
+                                                <Text style={styles.itemContent}>{item.address_1} ,{item.country}</Text>
                                                 <Text style={styles.itemContent}>{item.email?item.email:null}</Text>
                                             </View>
                                             <View style={{marginBottom:10,marginHorizontal:25,marginVertical:5,flexDirection:'row',justifyContent:'space-between',alignItems:'center'}}>
