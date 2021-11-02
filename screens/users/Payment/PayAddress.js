@@ -18,7 +18,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import {useForm, Controller} from "react-hook-form";
 import { Button} from 'react-native-elements';
 import {Picker} from '@react-native-picker/picker';
-
+import { useIsFocused } from '@react-navigation/native';
 
 const WIDTH =Dimensions.get('window').width;
 const HEIGHT =Dimensions.get('window').height;
@@ -73,6 +73,8 @@ const PayAddress = ({navigation,route}) =>{
 
     const [selectPayment,setSelectPayment]=useState(false);
     const [selectReadd,setSelectReadd]=useState(false);
+
+   
 
     const changeAdd = (add)=>{
         setSelectPayment(true);
@@ -254,7 +256,7 @@ const PayAddress = ({navigation,route}) =>{
         }).catch((err)=>console.log(err))
     },[selectedCountry2])
 
-    
+   
 
     return(
 
@@ -303,6 +305,7 @@ const PayAddress = ({navigation,route}) =>{
                                 <View style={{width:WIDTH*0.35}}>
                                     <Text style={styles.inputTitle}>姓</Text>                  
                                     <TextInput 
+                                        editable={false}
                                         style={styles.inputs}
                                         value={defaultAdd.lastname}
                                         onChangeText={(value)=>setDefaultAdd({...defaultAdd,lastname:value})}
@@ -314,6 +317,7 @@ const PayAddress = ({navigation,route}) =>{
                                 <View style={{width:WIDTH*0.35}}>
                                     <Text style={styles.inputTitle}>名</Text>
                                     <TextInput 
+                                        editable={false}
                                         style={styles.inputs}
                                         value={defaultAdd.firstname}
                                         onChangeText={(value)=>setDefaultAdd({...defaultAdd,firstname:value})}
@@ -326,6 +330,7 @@ const PayAddress = ({navigation,route}) =>{
                                 <Text style={styles.inputTitle}>所在城市</Text>
                                     <TextInput 
                                         style={styles.inputs}
+                                        editable={false}
                                         value={defaultAdd.city}
                                         onChangeText={(value)=>setDefaultAdd({...defaultAdd,city:value})}
                                         placeholder="輸入寄件人所在城市"
@@ -335,6 +340,7 @@ const PayAddress = ({navigation,route}) =>{
                                 <Text style={styles.inputTitle}>郵遞區號</Text>
                                     <TextInput 
                                         style={styles.inputs}
+                                        editable={false}
                                         value={defaultAdd.postcode}
                                         onChangeText={(value)=>setDefaultAdd({...defaultAdd,postcode:value})}
                                         placeholder="輸入寄件人郵遞區號"
@@ -344,6 +350,7 @@ const PayAddress = ({navigation,route}) =>{
                                 <Text style={styles.inputTitle}>公司名</Text>
                                     <TextInput 
                                         style={styles.inputs}
+                                        editable={false}
                                         value={defaultAdd.company}
                                         onChangeText={(value)=>setDefaultAdd({...defaultAdd,company:value})}
                                         placeholder="輸入寄件人公司名"
@@ -359,7 +366,7 @@ const PayAddress = ({navigation,route}) =>{
                                         paddingLeft:36,
                                     
                                     }}
-                                    
+                                    enabled={false}
                                     itemStyle={{
                                         fontSize:16,
                                         color:'#d3835f',
@@ -402,7 +409,7 @@ const PayAddress = ({navigation,route}) =>{
                                             paddingLeft:36,
                                         
                                         }}
-                                        
+                                        enabled={false}
                                         itemStyle={{
                                             fontSize:16,
                                             color:'#d3835f',
@@ -452,6 +459,7 @@ const PayAddress = ({navigation,route}) =>{
 
                                 <TextInput 
                                     style={styles.inputs}
+                                    editable={false}
                                     value={defaultAdd.address_1}
                                     onChangeText={(value)=>setDefaultAdd({...defaultAdd,address_1:value})}
                                     placeholder="輸入寄件人地址1"
@@ -462,6 +470,7 @@ const PayAddress = ({navigation,route}) =>{
                                 <Text style={styles.inputTitle}>地址2</Text>
                                     <TextInput 
                                         style={styles.inputs}
+                                        editable={false}
                                         value={defaultAdd.address_2}
                                         onChangeText={(value)=>setDefaultAdd({...defaultAdd,address_2:value})}
                                         placeholder="輸入寄件人地址2"
@@ -485,6 +494,7 @@ const PayAddress = ({navigation,route}) =>{
                                     <Text style={styles.inputTitle}>姓</Text>                  
                                     <TextInput 
                                         style={styles.inputs}
+                                        editable={false}
                                         value={recipientAdd.lastname}
                                         onChangeText={(value)=>setRecipientAdd({...recipientAdd,lastname:value})}
                                         placeholder="收件人姓"
@@ -496,6 +506,7 @@ const PayAddress = ({navigation,route}) =>{
                                     <Text style={styles.inputTitle}>名</Text>
                                     <TextInput 
                                         style={styles.inputs}
+                                        editable={false}
                                         value={recipientAdd.firstname}
                                         onChangeText={(value)=>setRecipientAdd({...recipientAdd,firstname:value})}
                                         placeholder="收件人名"
@@ -507,6 +518,7 @@ const PayAddress = ({navigation,route}) =>{
                                 <Text style={styles.inputTitle}>所在城市</Text>
                                 <TextInput 
                                     style={styles.inputs}
+                                    editable={false}
                                     value={recipientAdd.city}
                                     onChangeText={(value)=>setRecipientAdd({...recipientAdd,city:value})}
                                     placeholder="輸入收件人所在城市"
@@ -516,6 +528,7 @@ const PayAddress = ({navigation,route}) =>{
                                 <Text style={styles.inputTitle}>郵遞區號</Text>
                                 <TextInput 
                                     style={styles.inputs}
+                                    editable={false}
                                     value={recipientAdd.postcode}
                                     onChangeText={(value)=>setRecipientAdd({...recipientAdd,postcode:value})}
                                     placeholder="輸入收件人郵遞區號"
@@ -525,6 +538,7 @@ const PayAddress = ({navigation,route}) =>{
                                 <Text style={styles.inputTitle}>公司名</Text>
                                 <TextInput 
                                     style={styles.inputs}
+                                    editable={false}
                                     value={recipientAdd.company}
                                     onChangeText={(value)=>setRecipientAdd({...recipientAdd,company:value})}
                                     placeholder="輸入收件人公司名"
@@ -540,7 +554,7 @@ const PayAddress = ({navigation,route}) =>{
                                         paddingLeft:36,
                                     
                                     }}
-                                    
+                                    enabled={false}
                                     itemStyle={{
                                         fontSize:16,
                                         color:'#d3835f',
@@ -583,7 +597,7 @@ const PayAddress = ({navigation,route}) =>{
                                             paddingLeft:36,
                                         
                                         }}
-                                        
+                                        enabled={false}
                                         itemStyle={{
                                             fontSize:16,
                                             color:'#d3835f',
@@ -632,8 +646,9 @@ const PayAddress = ({navigation,route}) =>{
                                 </View>
                                     <TextInput 
                                         style={styles.inputs}
+                                        editable={false}
                                         value={recipientAdd.address_1}
-                                        onChangeText={(value)=>setRecipientAdd({...recipientAdd,address1:value})}
+                                        onChangeText={(value)=>setRecipientAdd({...recipientAdd,address_1:value})}
                                         placeholder="輸入收件人地址1"
                                     />
                             </View>
@@ -641,8 +656,9 @@ const PayAddress = ({navigation,route}) =>{
                                 <Text style={styles.inputTitle}>地址2</Text>
                                 <TextInput 
                                     style={styles.inputs}
+                                    editable={false}
                                     value={recipientAdd.address_2}
-                                    onChangeText={(value)=>setRecipientAdd({...recipientAdd,address2:value})}
+                                    onChangeText={(value)=>setRecipientAdd({...recipientAdd,address_2:value})}
                                     placeholder="輸入收件人地址2"
                                 />
                             </View>

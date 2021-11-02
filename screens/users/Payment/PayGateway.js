@@ -110,12 +110,12 @@ const PayGateway= ({navigation,route}) =>{
                 Accept: 'application/json',
                 'Content-Type': 'application/json',
                 'Authorization':'Bearer '+route.params.authorization,
-                
+                'X-Oc-Currency':'HKD'
             }
         })
         .then(response=>response.json())
         .then((responseJson)=>{
-            //console.log(responseJson);
+            console.log(responseJson);
            
             if(responseJson.success == 0){
                

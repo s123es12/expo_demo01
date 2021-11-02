@@ -154,16 +154,7 @@ const PaymentAddressList = ({navigation,route}) =>{
                 height:100,
             }}>
                 <View style={{alignItems:'center',flex:1,flexDirection:'row'}}>
-                    <TouchableOpacity
-                        style={{
-                            marginLeft:SIZES.padding,
-                            
-                        }}
-                        onPress={()=>navigation.goBack()}
-                    >
-                        <FontAwesomeIcon 
-                            icon={faChevronLeft} color='white' size={25}/>
-                    </TouchableOpacity>
+                    
 
                     <Text style={styles.textTitle}>地址管理</Text>
             

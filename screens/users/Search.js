@@ -32,27 +32,31 @@ const Category = ({navigation,route}) =>{
      
     const [searchResult, setSearchResult] =useState([]);
 
-    const AddToSearchList =()=>{
-        let list = [...searchList]; 
-        if(searchText == null || searchText ==''){
-
-        }else{
-            if(list.map(x=>x.text).indexOf(searchText)==-1){
-                list.push({key:searchText+list.length,id:list.length,text:searchText})
-                setSearchList(list);
+    const addProduct =(productId)=>{
+       
+        //console.log(productId)
+        fetch('https://goldrich.top/api/rest/cart', {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization':'Bearer '+route.params.authorization,
+                
+            },body:JSON.stringify({
+                'product_id':productId,
+                'quantity':1
+            })
+        })
+        .then(response=>response.json())
+        .then((responseJson)=>{
+            if(responseJson.success ==1){
+              
+            }else{
+                
             }
-
-        }
-        
-        
-    }
-    const deleteItem=(item)=>{
-        let new_List = [...searchList];
-        new_List.splice(item.id,1);
-        for(var i=0;i<new_List.length;i++){
-            new_List[i].id = i;
-        }
-        setSearchList(new_List);
+            
+          
+        }).catch((err)=>console.log(err));
     }
     useEffect(()=>{
         
@@ -131,7 +135,7 @@ const Category = ({navigation,route}) =>{
         <View>
             <View style={{
                     backgroundColor:"#cc6a3e",
-                    
+                   
                     borderBottomLeftRadius:10,
                     borderBottomRightRadius:10,
                     paddingTop:40,
@@ -152,8 +156,8 @@ const Category = ({navigation,route}) =>{
                     </TouchableOpacity>
                 </View> 
             </View>
-            <ScrollView>
-            <View style={{}}>
+            <ScrollView >
+            <View >
                 <Text style={styles.text}>搜尋產品/服務</Text>
                 <Input 
                     containerStyle={{marginLeft:10,width:WIDTH*0.95}}
@@ -181,7 +185,7 @@ const Category = ({navigation,route}) =>{
                 <Text style={[styles.text,{paddingBottom:15}]}>搜尋記錄</Text>
                 
                     
-                    
+                    <View style={{marginBottom:140}}>
                         {searchResult.length>=1?searchResult.map((item,index)=>{
                             return(
                                 <TouchableOpacity key={item+index} onPress={()=>navigation.navigate('ServiceProduct',{id:item.id,authorization:route.params.authorization})}>
@@ -218,6 +222,7 @@ const Category = ({navigation,route}) =>{
                         })
                         :
                         <Text style={{marginLeft:20}}>Not fund!!</Text>}
+                    </View>
                         
 
 

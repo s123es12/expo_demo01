@@ -33,19 +33,7 @@ const HEIGHT =Dimensions.get('window').height;
 const PayDelivery = ({navigation,route}) =>{
  
 
-    const sender={
-        name:'Lee, Jordan',
-        phone:'+852 9000 4710',
-        email:'wendylou@gmail.com',
-        address:''
-    }
-    
-    const recipient={
-        name:'Sam Wong',
-        phone:'+852 9000 4710',
-        email:'Sam.W@gmail.com',
-        address:''
-    }
+    const [error,setErrorMsg]=useState();
     
     const [isLoad, setLoad]=useState(true);
     const [isLoad2, setLoad2]=useState(true);
@@ -59,18 +47,23 @@ const PayDelivery = ({navigation,route}) =>{
     const [isLoadPaymentAdd,setLoadPaymentAdd]=useState(true);
     const [isLoadShippingAdd,setLoadShippingAdd]=useState(true);
 
-    const [checkDelivery,setDelivery] = useState(true);
-    const [checkShop,setShop] = useState(false);
-
-    
-
     const [checkOrderAddress,setOrderAddress] = useState(true);
 
     const [commentText,setCommentText] = useState(null);
 
     const onSubmit = data =>{
         //console.log('Comment Test: ',commentText);
-        navigation.navigate('PayGateway',{authorization:route.params.authorization,comment:commentText});
+
+        let checkBool = methodCheck.filter((item,index)=>{
+            return item==true;
+        })
+        //console.log(checkBool);
+        if(checkBool.length<=0){
+            setErrorMsg('請選擇送貨方式');
+        }else{
+            navigation.navigate('PayGateway',{authorization:route.params.authorization,comment:commentText});
+        }
+
         
         
        
@@ -188,7 +181,7 @@ const PayDelivery = ({navigation,route}) =>{
         })
         .then(response=>response.json())
         .then((responseJson)=>{
-            console.log(responseJson);
+            //console.log(responseJson);
             if(responseJson.success ==1){
                 if(responseJson.data.address_id==''||responseJson.data.address_id==null){
 
@@ -208,7 +201,7 @@ const PayDelivery = ({navigation,route}) =>{
         }).catch((err)=>console.log(err))
         .finally(()=>{setLoadShippingAdd(false);})
 
-
+        
 
     },[])
 
@@ -225,7 +218,7 @@ const PayDelivery = ({navigation,route}) =>{
         check[index] = !check[index];
         setMethodCheck(check);
 
-        console.log(shippingMethods.shipping_methods[index].quote[0].code);
+        //console.log(shippingMethods.shipping_methods[index].quote[0].code);
         
         fetch('https://goldrich.top/api/rest/shippingmethods', {
             method: 'GET',
@@ -238,7 +231,7 @@ const PayDelivery = ({navigation,route}) =>{
         })
         .then(response=>response.json())
         .then((responseJson)=>{
-            console.log(responseJson);
+            //console.log(responseJson);
             if(responseJson.success ==1){
                 fetch('https://goldrich.top/api/rest/shippingmethods', {
                     method: 'POST',
@@ -255,7 +248,7 @@ const PayDelivery = ({navigation,route}) =>{
                 .then(response=>response.json())
                 .then((responseJson)=>{
         
-                    console.log(responseJson);
+                    //console.log(responseJson);
         
                     if(responseJson.success ==1){
                        // console.log(responseJson);
@@ -461,6 +454,7 @@ const PayDelivery = ({navigation,route}) =>{
                                 placeholder='輸入備註'
                             />
                         </View>
+                        {error&&  <Text style={[styles.errorText,{fontSize:14}]}>{error}</Text>}
 
                         <View style={{alignItems:'center'}}>
                             <Button
@@ -553,6 +547,10 @@ const styles =StyleSheet.create({
         paddingLeft:24,
         fontSize:14,
         marginVertical:16
+    },errorText:{
+        color:"red",
+        fontSize:12,
+        paddingLeft:5
     },
     
 });
