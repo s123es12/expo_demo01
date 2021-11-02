@@ -23,6 +23,9 @@ const Onboarding =({navigation,route})=>{
     const [message, setMessage] = useState();
     const [messageType, setMessageType] =useState();
     const [storeInfo,setStoreInfo] = useState({});
+    const [resetAuth, setResetAuth]=useState(false);
+
+
     useEffect(()=>{
         
         fetch('https://goldrich.top/api/rest/oauth2/token/client_credentials', {
@@ -59,7 +62,7 @@ const Onboarding =({navigation,route})=>{
 
     
 
-    },[]);
+    },[resetAuth]);
     
     const handleMessage = (message ,type='FAILED')=>{
         setMessage(message);
@@ -106,6 +109,8 @@ const Onboarding =({navigation,route})=>{
                         }else if(responseJson.success==0){
                             setError(responseJson.error);
                             setTimeout(()=>navigation.navigate('LoginByPhone',{authorization:authorization,userInfo:user}),1000);
+                        }else if(JSON.stringify(responseJson.error[0]).match('The access token provided is invalid')){
+                            setResetAuth(!resetAuth);
                         }
                     }).catch((err)=>console.log(err))
                 }else{

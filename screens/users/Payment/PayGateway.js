@@ -115,7 +115,7 @@ const PayGateway= ({navigation,route}) =>{
         })
         .then(response=>response.json())
         .then((responseJson)=>{
-            console.log(responseJson);
+            //console.log(responseJson);
            
             if(responseJson.success == 0){
                
@@ -160,7 +160,7 @@ const PayGateway= ({navigation,route}) =>{
         })
         .then(response=>response.json())
         .then((responseJson)=>{
-           console.log(responseJson);
+           //console.log(responseJson);
 
             if(responseJson.success ==1){
                 setPaymentMethods(responseJson.data.payment_methods);

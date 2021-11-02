@@ -253,7 +253,7 @@ const Register = ({ navigation,route }) => {
         </View>
         <View style={{marginBottom:5,marginTop:50,flex:1,flexDirection:'row',alignItems:'center',justifyContent:'center'}}>
             <Text>或使用</Text>
-            <Text style={{color:"#cc6a3e",textDecorationLine:'underline'}} onPress={()=>{navigation.navigate("Onboarding")}}>其他方式</Text>
+            <Text style={{color:"#cc6a3e"}} onPress={()=>{navigation.navigate("Onboarding")}}>其他方式</Text>
             <Text>登入</Text>
         </View>
   

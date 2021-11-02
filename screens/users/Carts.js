@@ -240,11 +240,11 @@ const Carts = ({navigation,route}) =>{
         .then((responseJson)=>{
             console.log(responseJson);
             if(responseJson.success ==1){
-                if(responseJson.data.addresses.length>=1){
+                if(responseJson.data.addresses&&responseJson.data.addresses.length>=1){
                     setTimeout(()=>
                         navigation.navigate('PayAddress',{authorization:route.params.authorization})
                     ,1000); 
-                }else{
+                }else if(responseJson.data.length<=0){
                     Alert.alert(
                         '請新增最少一個個人地址再進行結賬程序',
                         '',
@@ -258,7 +258,7 @@ const Carts = ({navigation,route}) =>{
                     );
                 }
             }else if(responseJson.success==0){
-
+                
             }
           
         }).catch((err)=>console.log(err))
