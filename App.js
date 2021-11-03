@@ -39,7 +39,7 @@ import PayDelivery from "./screens/users/Payment/PayDelivery";
 import PayGateway from "./screens/users/Payment/PayGateway";
 import PaypalApp from "./screens/users/Payment/PaypalApp";
 import PaymentAddressList from "./screens/users/Payment/PaymentAddressList";
-
+import PaymentResult from "./screens/users/Payment/PaymentResult";
 
 
 const theme={
@@ -227,6 +227,11 @@ const App =({navigation})=>{
         <Stack.Screen 
           name="PaymentAddressList"
           component={PaymentAddressList}
+          options={{headerShown:false}}
+        />
+        <Stack.Screen 
+          name="PaymentResult"
+          component={PaymentResult}
           options={{headerShown:false}}
         />
 

@@ -18,6 +18,7 @@ import { Button,CheckBox} from 'react-native-elements';
 
 
 
+
 const WIDTH =Dimensions.get('window').width;
 const HEIGHT =Dimensions.get('window').height;
 
@@ -44,7 +45,7 @@ const PayGateway= ({navigation,route}) =>{
     const handlePayment = (payment,index)=>{
         //console.log(payment, index);
         let new_list=[...paymentList];
-        setPaymentSelect(JSON.stringify(payment).toLowerCase());
+        setPaymentSelect(payment);
         
         for(var i=0;i<paymentList.length;i++){
             new_list[i]=false;
@@ -84,49 +85,64 @@ const PayGateway= ({navigation,route}) =>{
          //console.log(paymentSelect);
         //console.log(paymentMethods[paymentId]);
         switch(paymentSelect){
-            case 'paypal':{
+            case 'PayPal':{
                 console.log('paypal');
+                fetch('https://goldrich.top/api/rest/confirm', {
+                    method: 'POST',
+                    headers: {
+                        Accept: 'application/json',
+                        'Content-Type': 'application/json',
+                        'Authorization':'Bearer '+route.params.authorization,
+                        'X-Oc-Currency':'HKD'
+                    }
+                })
+                .then(response=>response.json())
+                .then((responseJson)=>{
+                    //console.log(responseJson);
                 
+                    if(responseJson.success == 0){
+                    
+                    }else if(responseJson.success ==1){
+                        
+                        setShowModal(true);
+                        setHtmlCode(responseJson.data.payment);
+                        
+                    
+                    }
+                }).catch((err)=>console.log(err));
                 break;
             }
-            
+            case '貨到付款':{
+                console.log('貨到付款');
+                setTimeout(()=>navigation.navigate('PaymentResult',{shipping_method:'貨到付款'}),1000)
+             
+                break;
+            }
+            case '銀行轉帳':{
+                console.log('銀行轉帳');
+                fetch('https://goldrich.top/api/rest/confirm', {
+                    method: 'POST',
+                    headers: {
+                        Accept: 'application/json',
+                        'Content-Type': 'application/json',
+                        'Authorization':'Bearer '+route.params.authorization,
+                        'X-Oc-Currency':'HKD'
+                    }
+                })
+                .then(response=>response.json())
+                .then((responseJson)=>{
+                    //console.log(responseJson.data.payment);
+                   
+                    
+                }).catch((err)=>console.log(err));
+                setTimeout(()=>navigation.navigate('PaymentResult',{shipping_method:'銀行轉帳'}),1000)
+                break;
+            }
             default:{
-                console.log(paymentSelect);
+                
             }
         }
         
-       
-
-        
-
-        
-     
-
-        
-
-        fetch('https://goldrich.top/api/rest/confirm', {
-            method: 'POST',
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-                'Authorization':'Bearer '+route.params.authorization,
-                'X-Oc-Currency':'HKD'
-            }
-        })
-        .then(response=>response.json())
-        .then((responseJson)=>{
-            //console.log(responseJson);
-           
-            if(responseJson.success == 0){
-               
-            }else if(responseJson.success ==1){
-                setShowModal(true);
-                setHtmlCode(responseJson.data.payment);
-             
-            }
-        }).catch((err)=>console.log(err));
-
-         
 
     }
     const handleWebViewNavigationStateChange = (newNavState) => {
@@ -143,7 +159,6 @@ const PayGateway= ({navigation,route}) =>{
             setShowModal(false);
             console.log("cancel");
            
-            //navigation.navigate('Carts',{authorization:route.params.authorization});
         }
        
     }
