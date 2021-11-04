@@ -48,7 +48,9 @@ const PaymentResult = ({navigation,route}) =>{
         .then((responseJson)=>{
             //console.log(responseJson);
             if(responseJson.success==1){
-                navigation.navigate('User',{authorization:route.params.authorization});
+                navigation.navigate('User',{authorization:route.params.authorization,showToastMessage:route.params.showToastMessage('您的訂單已經成功送出，我們會在第一時間進行處理！')});
+            }else{
+               
             }
            
           

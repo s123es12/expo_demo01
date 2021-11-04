@@ -114,7 +114,22 @@ const PayGateway= ({navigation,route}) =>{
             }
             case '貨到付款':{
                 console.log('貨到付款');
-                setTimeout(()=>navigation.navigate('PaymentResult',{shipping_method:'貨到付款'}),1000)
+                fetch('https://goldrich.top/api/rest/confirm', {
+                    method: 'POST',
+                    headers: {
+                        Accept: 'application/json',
+                        'Content-Type': 'application/json',
+                        'Authorization':'Bearer '+route.params.authorization,
+                        'X-Oc-Currency':'HKD'
+                    }
+                })
+                .then(response=>response.json())
+                .then((responseJson)=>{
+                    //console.log(responseJson.data.payment);
+                   
+                    
+                }).catch((err)=>console.log(err));
+                setTimeout(()=>navigation.navigate('PaymentResult',{shipping_method:'貨到付款',authorization:route.params.authorization,showToastMessage:route.params.showToastMessage}),1000)
              
                 break;
             }
@@ -135,7 +150,7 @@ const PayGateway= ({navigation,route}) =>{
                    
                     
                 }).catch((err)=>console.log(err));
-                setTimeout(()=>navigation.navigate('PaymentResult',{shipping_method:'銀行轉帳'}),1000)
+                setTimeout(()=>navigation.navigate('PaymentResult',{shipping_method:'銀行轉帳',authorization:route.params.authorization,showToastMessage:route.params.showToastMessage}),1000)
                 break;
             }
             default:{
@@ -153,7 +168,7 @@ const PayGateway= ({navigation,route}) =>{
            
             setShowModal(false);
             console.log("finsih");
-            navigation.navigate('PaypalApp',{authorization:route.params.authorization});
+            navigation.navigate('PaypalApp',{authorization:route.params.authorization,showToastMessage:route.params.showToastMessage});
         }else if(url.includes('https://goldrich.top/index.php?route=checkout/cart')){
 
             setShowModal(false);

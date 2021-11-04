@@ -61,7 +61,7 @@ const PayDelivery = ({navigation,route}) =>{
         if(checkBool.length<=0){
             setErrorMsg('請選擇送貨方式');
         }else{
-            navigation.navigate('PayGateway',{authorization:route.params.authorization,comment:commentText});
+            navigation.navigate('PayGateway',{authorization:route.params.authorization,comment:commentText,showToastMessage:route.params.showToastMessage});
         }
 
         

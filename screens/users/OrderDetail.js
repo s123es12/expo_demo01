@@ -121,8 +121,10 @@ const OrderDetail = ({navigation,route}) =>{
                         <View style={{alignItems:'center',borderBottomWidth:1,paddingBottom:20,borderBottomColor:'#c5c5c5'}}>
                             {isLoad?<ActivityIndicator/>:
                                <View style={{alignItems:'center'}}>
-                                    {status=='Complete'?<QRCode value={route.params.id} size={40}/>:status=='Shipped'?<FontAwesomeIcon icon={faTruck} size={40} style={{}}/>:status=='Pending'?<FontAwesomeIcon icon={faListAlt} size={40} style={{}}/>:null}
-                                    <Text style={{fontSize:18,color:'#623f31',fontWeight:'700',marginTop:5}}>{status=='Complete'?`到店自取券編號: #${route.params.id}`:status=='Shipped'?'運輸中':status=='Pending'?'待辦的':null}</Text>
+                                    <Text style={{fontSize:18, color:'#cf744a',fontWeight:'700',marginBottom:5}}>訂單編號</Text>  
+                                   <QRCode value={order.order_id} size={120} />
+                                    {/* {status=='Complete'?<QRCode value={route.params.id} size={40}/>:status=='Shipped'?<FontAwesomeIcon icon={faTruck} size={40} style={{}}/>:status=='Pending'?<FontAwesomeIcon icon={faListAlt} size={40} style={{}}/>:null} */}
+                                    <Text style={{fontSize:18,color:'#623f31',fontWeight:'700',marginTop:5}}>訂單狀態: {status=='Complete'?`到店自取券編號: #${route.params.id}`:status=='Shipped'?'運輸中':status=='Pending'?'待辦的':null}</Text>
                                     <Text style={{fontSize:18, color:'#cf744a',fontWeight:'700',marginTop:5}}>+ 積分</Text>             
                                 </View>
                                 

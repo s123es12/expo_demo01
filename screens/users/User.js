@@ -25,7 +25,8 @@ const Tab = createBottomTabNavigator();
 const Stack =createStackNavigator();
 
 const user = ({route})=>{
-   
+    
+
     return(
         
             

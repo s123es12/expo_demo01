@@ -40,7 +40,7 @@ import PayGateway from "./screens/users/Payment/PayGateway";
 import PaypalApp from "./screens/users/Payment/PaypalApp";
 import PaymentAddressList from "./screens/users/Payment/PaymentAddressList";
 import PaymentResult from "./screens/users/Payment/PaymentResult";
-
+import { RootSiblingParent } from 'react-native-root-siblings';
 
 const theme={
   ...DefaultTheme,
@@ -282,5 +282,9 @@ const App =({navigation})=>{
 }
 
 export default ()=>{
-  return <App/>;
+  return (
+    <RootSiblingParent>
+  <App/>
+  </RootSiblingParent>
+  );
 }

@@ -248,6 +248,7 @@ const UserHome = ({navigation,route}) =>{
                                         <Text style={{color:'#cc6a3e'}}>${item.price.toFixed(1)}</Text>
                                         <Button 
                                             buttonStyle={{backgroundColor:'#623f31',color:"#000",height:20,padding:12,borderRadius:5}}
+                                            disabled={item.quantity<=0?true:false}
                                             title="加入購物車"
                                             titleStyle={{fontSize:12}}
                                             onPress={()=>addProduct(item.product_id)}

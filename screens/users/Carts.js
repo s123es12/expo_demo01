@@ -18,11 +18,11 @@ import {SIZES} from '../../constants/theme';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faHeart } from '@fortawesome/free-regular-svg-icons';  
 import Modal from "react-native-modal";
-
+import Toast from 'react-native-root-toast';
 import { Button } from 'react-native-elements';
 
 const WIDTH =Dimensions.get('window').width;
-
+const HEIGHT =Dimensions.get('window').height;
 
 
 const Carts = ({navigation,route}) =>{
@@ -48,6 +48,24 @@ const Carts = ({navigation,route}) =>{
 
     const [canClick,setCanClick]=useState(false);
     const [update,setUpdate]=useState(false);
+
+    const [visible,setVisible] = useState(false);
+    const [returnMsg, setReturnMsg] = useState();
+
+    const showToastMessage = (type)=>{
+        setReturnMsg(type);
+        setVisible(true);
+        setTimeout(() => setVisible(false), 5000); 
+    }
+
+    const click = (type)=>{
+        
+        setVisible(!visible);
+        setTimeout(() => setVisible(false), 5000); 
+    }
+
+
+
     const handleCoupon = (couponName) =>{
         fetch('https://goldrich.top/api/rest/coupon', {
             method: 'POST',
@@ -242,7 +260,7 @@ const Carts = ({navigation,route}) =>{
             if(responseJson.success ==1){
                 if(responseJson.data.addresses&&responseJson.data.addresses.length>=1){
                     setTimeout(()=>
-                        navigation.navigate('PayAddress',{authorization:route.params.authorization})
+                        navigation.navigate('PayAddress',{authorization:route.params.authorization,showToastMessage:showToastMessage})
                     ,1000); 
                 }else if(responseJson.data.length<=0){
                     Alert.alert(
@@ -390,7 +408,7 @@ const Carts = ({navigation,route}) =>{
                                 marginLeft:SIZES.padding,
                                 marginRight:SIZES.padding,
                             }}
-                            onPress={()=>console.log("heart")}
+                            onPress={()=>click()}
                         >
                             <FontAwesomeIcon 
                                 icon={faHeart} color='white' size={25}/>
@@ -402,6 +420,16 @@ const Carts = ({navigation,route}) =>{
 
 
                 </View>
+                <Toast
+                    visible={visible}
+                    position={-HEIGHT*0.15}
+                    shadow={false}
+                    animation={false}
+                    hideOnPress={true}
+                  
+                >
+                    {returnMsg}
+                </Toast>
                 <ScrollView style={{marginBottom:50}}>
                     <View style={{alignItems:'center',marginBottom:20}}>
                         {isLoading?<ActivityIndicator/>: cartsList.products?cartsList.products.map((item,index)=>{

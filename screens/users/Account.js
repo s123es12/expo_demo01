@@ -2,23 +2,23 @@ import React,{useEffect, useState} from 'react';
 import { 
     View,
     Text,
-    Image,
-   TouchableHighlight,
     TouchableOpacity,
-    FlatList,
     StyleSheet,
     Dimensions,
     ScrollView,
-    TextInput
+
 } from 'react-native';
-import {faBars,faPeopleArrows,faMicrophone, faLiraSign,faTimes,faCheckCircle,faUndo,faChevronRight,faDonate,faCube} from '@fortawesome/free-solid-svg-icons'
+import {faTimes,faChevronRight,faDonate,faCube,faSms} from '@fortawesome/free-solid-svg-icons'
 import {SIZES} from '../../constants/theme';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faHeart } from '@fortawesome/free-regular-svg-icons';  
 import Modal from "react-native-modal";
-import { Button,Avatar,ListItem } from 'react-native-elements';
+import { Avatar } from 'react-native-elements';
 import QRCode from 'react-native-qrcode-svg';
 import { useIsFocused } from '@react-navigation/native';
+import { ActivityIndicator } from 'react-native';
+import * as WebBrowser from 'expo-web-browser';
+
 
 const WIDTH =Dimensions.get('window').width;
 
@@ -30,22 +30,54 @@ const Account = ({navigation,route}) =>{
     const [userData, setUserData] = useState({});
     const [userPoints, setUserPoints] =useState(null);
 
-  
+    const [loadUser, setLoadUser] = useState(true);
     
     const [isMemberVisible,setMemberVisible]=useState(false);
   
+    const [storeDetail, setStoreDetail] = useState();
+    const [loadStore,setLoadStore]=useState(true);
+
     const showMemberModal=()=>{
       
         setMemberVisible(!isMemberVisible);
     }
 
    
-    
+    const handleContact = () =>{
+        let store_name = storeDetail.store_name.trim();
+        let text= '你好 我想問關於'+store_name+'的資料'
+        if(loadStore==false){
+            WebBrowser.openBrowserAsync(`https://api.whatsapp.com/send/?phone=852${storeDetail.store_telephone}&text=${text}&app_absent=0`);
+        }else{
+            setTimeout(()=> WebBrowser.openBrowserAsync(`https://api.whatsapp.com/send/?phone=852${text}&text&app_absent=0`),2000)
+        }
+    }
 
     
     
 
     useEffect(()=>{
+        fetch('https://goldrich.top/api/rest/stores/0', {
+            method: 'GET',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization':'Bearer '+route.params.authorization,
+                
+            }
+        })
+        .then(response=>response.json())
+        .then((responseJson)=>{
+            if(responseJson.success==1){
+                //console.log(responseJson.data);
+                setStoreDetail(responseJson.data);
+            }else if(responseJson.success==0){
+
+            }
+          
+        }).catch((err)=>console.log(err))
+        .finally(()=>setLoadStore(false));
+
         fetch('https://goldrich.top/api/rest/account', {
             method: 'GET',
             headers: {
@@ -74,7 +106,7 @@ const Account = ({navigation,route}) =>{
 
             }
         }).catch((err)=>console.log(err))
-        .finally(()=>{})
+        .finally(()=>setLoadUser(false))
 
        
 
@@ -93,20 +125,22 @@ const Account = ({navigation,route}) =>{
                                     <FontAwesomeIcon icon={faTimes} size={30} onPress={showMemberModal}/>
                                 </View>
                                 <View style={{alignItems:'center',padding:20}}>
-                                    <QRCode value={userData.customer_id} />
+                                    <QRCode value={userData.email} />
                                     <Text style={{marginTop:20,fontSize:16,color:'#56585e'}}>會員編號:{userData.customer_id}</Text>
                                 </View>
-                                {/* <View style={{flexDirection:'row',justifyContent:'space-between',paddingVertical:10,paddingHorizontal:WIDTH*0.15,alignItems:'center'}}>
+                                <View style={{flexDirection:'row',justifyContent:'space-between',paddingVertical:10,paddingHorizontal:WIDTH*0.15,alignItems:'center'}}>
                                     <View style={{flexDirection:'row',alignItems:'center'}}>
                                         <FontAwesomeIcon icon={faDonate} color="#fdd952"/>
                                         <Text style={{fontWeight:'700',color:'#000',marginLeft:8}}>{userPoints}</Text>
                                     </View>
                                     <View style={{flexDirection:'row',alignItems:'center'}}>
                                         <FontAwesomeIcon icon={faCube} color="#c1c1c1"/>
-                                        <Text style={{color:'#c1c1c1',marginLeft:8}}>銀</Text>
+                                        {loadUser?<ActivityIndicator/>:
+                                        <Text style={{color:'#c1c1c1',marginLeft:8}}>{userData.custom_fields[0].custom_field_value[0].name}</Text>
+                                        }
                                     </View>
                                     
-                                </View> */}
+                                </View> 
                             </View>
                         </View>
                     </View>
@@ -146,7 +180,7 @@ const Account = ({navigation,route}) =>{
                                     <Text>{userData.email}</Text>
                                 </View>
                                 <QRCode 
-                                    value={userData.customer_id}
+                                    value={userData.email}
                                     size={40}
                                 />
                             </View>
@@ -173,14 +207,22 @@ const Account = ({navigation,route}) =>{
                                     <FontAwesomeIcon icon={faChevronRight} />
                                 </View>
                             </TouchableOpacity>
+                           
                         </View>
-
-
-
+                        <View style={styles.settingList}>
+                            <TouchableOpacity onPress={()=>handleContact()}>
+                                <View style={styles.settingItem}>
+                                    <Text style={styles.settingText}>與我們聯絡</Text>
+                                    <FontAwesomeIcon icon={faSms} size={30} />
+                                </View>
+                            </TouchableOpacity>
+                        </View>
+                       
                     </ScrollView>
-
-
+                    
+                   
                 </View>
+                
             </View>
           
 

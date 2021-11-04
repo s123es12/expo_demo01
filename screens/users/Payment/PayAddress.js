@@ -100,7 +100,7 @@ const PayAddress = ({navigation,route}) =>{
         //console.log('defaultAdd: ',defaultAdd);
         //console.log('recipientAdd: ',recipientAdd);
 
-        setTimeout(()=>{navigation.navigate('PayDelivery',{authorization:route.params.authorization})},1000);
+        setTimeout(()=>{navigation.navigate('PayDelivery',{authorization:route.params.authorization,showToastMessage:route.params.showToastMessage})},1000);
     }
     
 

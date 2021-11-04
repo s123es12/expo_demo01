@@ -1,15 +1,16 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, TouchableOpacity,Modal,  StyleSheet,Dimensions } from 'react-native';
 import {faStar,faChevronLeft} from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import {SIZES} from '../../../constants/theme';
 import { Button} from 'react-native-elements';
+import Toast from 'react-native-root-toast';
 
 const WIDTH =Dimensions.get('window').width;
 const HEIGHT =Dimensions.get('window').height;
 
 const PaypalApp = ({navigation,route}) =>{
-
+   
 
     const onSubmit = () =>{
         fetch('https://goldrich.top/api/rest/confirm', {
@@ -23,15 +24,16 @@ const PaypalApp = ({navigation,route}) =>{
         })
         .then(response=>response.json())
         .then((responseJson)=>{
-            //console.log(responseJson);
+            console.log(responseJson);
             if(responseJson.success==1){
-                navigation.navigate('User',{authorization:route.params.authorization});
+               
+                navigation.navigate('User',{authorization:route.params.authorization,showToastMessage:route.params.showToastMessage('您的訂單已經成功付款(PayPal)，我們會在第一時間進行處理！')});
             }
            
           
         }).catch((err)=>console.log(err))
         
-      
+       
          
     }
 
@@ -74,6 +76,7 @@ const PaypalApp = ({navigation,route}) =>{
                    
               
         </View>
+       
         
         
 
