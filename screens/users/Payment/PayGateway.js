@@ -39,9 +39,9 @@ const PayGateway= ({navigation,route}) =>{
     const [getConfirm, setConfirm] = useState(false);
     const [progressNum,setProgressNum] =useState(0);
 
-  
-
-
+    const [htmlCode2, setHtmlCode2] = useState('');
+    const [showModal2, setShowModal2] = useState(false);
+    const [paymentAdd,setPaymentAdd]=useState();
     const handlePayment = (payment,index)=>{
         //console.log(payment, index);
         let new_list=[...paymentList];
@@ -64,7 +64,7 @@ const PayGateway= ({navigation,route}) =>{
             },body:JSON.stringify({
                 "payment_method": paymentMethods[index].code,
                 "agree": 1,
-                "comment": commentText
+                "comment": JSON.stringify(commentText)
             })
         })
         .then(response=>response.json())
@@ -146,11 +146,22 @@ const PayGateway= ({navigation,route}) =>{
                 })
                 .then(response=>response.json())
                 .then((responseJson)=>{
-                    //console.log(responseJson.data.payment);
-                   
+                    console.log(responseJson);
+                    if(responseJson.success==1){
+                      
+                        let text = responseJson.data.payment;
+                        let new_txt = text.split('<div class="buttons">');
+                        //console.log(new_txt[0].replace(/(<([^>]+)>)/gi,''));
+                        //setPaymentAdd(new_txt[0].replace(/(<([^>]+)>)/gi,''));
+                        setTimeout(()=>navigation.navigate('PaymentResult',{shipping_method:'銀行轉帳',paymentAdd:new_txt[0].replace(/(<([^>]+)>)/gi,''),authorization:route.params.authorization,showToastMessage:route.params.showToastMessage}),1000)
+                    }
+                    
+                    // console.log(responseJson.data.payment);
+                    // console.log(JSON.parse(responseJson.data.payment));
+                    
                     
                 }).catch((err)=>console.log(err));
-                setTimeout(()=>navigation.navigate('PaymentResult',{shipping_method:'銀行轉帳',authorization:route.params.authorization,showToastMessage:route.params.showToastMessage}),1000)
+               
                 break;
             }
             default:{
@@ -177,6 +188,9 @@ const PayGateway= ({navigation,route}) =>{
         }
        
     }
+    const handleWebViewNavigationStateChange2 = (newNavState) => {
+
+    }
 
     useEffect(()=>{
         fetch('https://goldrich.top/api/rest/paymentmethods', {
@@ -199,13 +213,6 @@ const PayGateway= ({navigation,route}) =>{
                     list[index]=false;
                     setPaymentList(list);
                 })
-                
-                
-              
-
-
-
-
             }else if(responseJson.success==0){
                 setConfirm(true);
                 let errMsg = responseJson.error.map((item,index)=>{
@@ -220,7 +227,7 @@ const PayGateway= ({navigation,route}) =>{
         }).catch((err)=>console.log(err))
         .finally(()=>setLoadMethod(false))
        
-       
+       console.log(commentText);
     },[])
 
 
@@ -352,7 +359,17 @@ const PayGateway= ({navigation,route}) =>{
                     />
                 </Modal>
                
-
+                <Modal 
+                    style={{flex:1,width:WIDTH,height:HEIGHT}}
+                    visible={showModal2}
+                >   
+                   
+                    <View style={{justifyContent:'center'}}>
+                        { progressNum<0.5?<ActivityIndicator size="large" color="#00ff00"/>:null}
+                    </View>
+                   
+                    <Text>{htmlCode2}</Text>
+                </Modal>
 
 
 

@@ -10,6 +10,7 @@ const HEIGHT =Dimensions.get('window').height;
 
 const PaymentResult = ({navigation,route}) =>{
     const shipping_method = route.params.shipping_method;
+    const paymentAdd = route.params.paymentAdd;
     const [storeInfo, setStoreInfo] = useState({});
 
     useEffect(()=>{
@@ -32,6 +33,8 @@ const PaymentResult = ({navigation,route}) =>{
             }
           
         }).catch((err)=>console.log(err));
+
+        //console.log(route.params.paymentAdd);
     },[])
 
     const onSubmit = () =>{
@@ -111,9 +114,8 @@ const PaymentResult = ({navigation,route}) =>{
                 </View>
                 :shipping_method=='銀行轉帳'?
                 <View style={{alignItems:'center'}}>
-                    <Text style={{fontSize:30,marginBottom:20}}>銀行轉帳付款說明</Text>
-                    <Text>商店收款銀行帳戶</Text>
-                    <Text>★確定入帳後，我們會立即幫您處理，感謝您的支持與愛護★</Text>
+                    <Text style={{fontSize:20,textAlign:'center'}}>{paymentAdd}</Text>
+                    
 
                     
 
@@ -130,7 +132,7 @@ const PaymentResult = ({navigation,route}) =>{
                         borderWidth: 0,
                         borderRadius:20, 
                         backgroundColor:"#d9a21b",
-                        marginTop:60,
+                        marginTop:20,
                         width:WIDTH*0.6
                     }}
                     title="回到首頁"

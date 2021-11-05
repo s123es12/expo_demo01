@@ -35,7 +35,8 @@ const OrderDetail = ({navigation,route}) =>{
     const [isLoad, setLoading]=useState(true);
     const [order, setOrder] = useState({});
     
-
+    const [getter,setGetter]=useState({});
+    const [getProductTime,setGetProductTime] = useState();
     const generateBoxShadowStyle = (
         xOffset,
         yOffset,
@@ -73,11 +74,20 @@ const OrderDetail = ({navigation,route}) =>{
         })
         .then(response=>response.json())
         .then((responseJson)=>{
-            //console.log(responseJson);
+            console.log(responseJson);
             if(responseJson.success==1){
                 setOrder(responseJson.data);
-                setStatus(responseJson.data.histories[responseJson.data.histories.length-1].status);
+                setStatus(responseJson.data.histories[responseJson.data.histories.length-1]);
+                let obj = JSON.parse(responseJson.data.comment.replace(/&quot;/g,'"'));
+                //console.log(obj);
+                setGetter(obj);
                 //console.log(status);
+                let getProductDate = responseJson.data.histories.filter((item,index)=>{
+                    return item.status =='可取件日期';
+                })
+                //console.log(getProductDate);
+                setGetProductTime(getProductDate[0].comment);
+                //setGetter(obj);
             }else if(responseJson.success==0){
                 
             }
@@ -124,7 +134,7 @@ const OrderDetail = ({navigation,route}) =>{
                                     <Text style={{fontSize:18, color:'#cf744a',fontWeight:'700',marginBottom:5}}>訂單編號</Text>  
                                    <QRCode value={order.order_id} size={120} />
                                     {/* {status=='Complete'?<QRCode value={route.params.id} size={40}/>:status=='Shipped'?<FontAwesomeIcon icon={faTruck} size={40} style={{}}/>:status=='Pending'?<FontAwesomeIcon icon={faListAlt} size={40} style={{}}/>:null} */}
-                                    <Text style={{fontSize:18,color:'#623f31',fontWeight:'700',marginTop:5}}>訂單狀態: {status=='Complete'?`到店自取券編號: #${route.params.id}`:status=='Shipped'?'運輸中':status=='Pending'?'待辦的':null}</Text>
+                                    <Text style={{fontSize:18,color:'#623f31',fontWeight:'700',marginTop:5}}>訂單狀態: {status.status=='Complete'?`到店自取券編號: #${route.params.id}`:status.status=='Shipped'?'運輸中':status.status=='Pending'?'待辦的':null}</Text>
                                     <Text style={{fontSize:18, color:'#cf744a',fontWeight:'700',marginTop:5}}>+ 積分</Text>             
                                 </View>
                                 
@@ -199,12 +209,12 @@ const OrderDetail = ({navigation,route}) =>{
                                     </View>
                                     <View>
                                         <Text style={styles.inputsTitle}>聯絡電話</Text>
-                                        <Text style={styles.inputs}></Text>
+                                        <Text style={styles.inputs}>{getter.phone}</Text>
                                     </View>
                                 </View>
                                 <View>
                                     <Text style={styles.inputsTitle}>聯絡電郵</Text>
-                                    <Text style={styles.inputs}></Text>
+                                    <Text style={styles.inputs}>{getter.email}</Text>
                                 </View>
                                 <View>
                                     <Text style={styles.inputsTitle}>收件方地址</Text>
@@ -219,8 +229,8 @@ const OrderDetail = ({navigation,route}) =>{
                             <View style={{flexDirection:'row',justifyContent:'space-between'}}>
                                 <View style={{flex:2}}>
                                     <View >
-                                        <Text style={styles.inputsTitle}>上門收件時間</Text>
-                                        <Text style={styles.inputs}></Text>
+                                        <Text style={styles.inputsTitle}>預約收件時間</Text>
+                                        <Text style={styles.inputs}>{getter.date}</Text>
                                     </View>
                                     <View >
                                         <Text style={styles.inputsTitle}>付款方式</Text>
@@ -234,16 +244,16 @@ const OrderDetail = ({navigation,route}) =>{
                                 <View style={{flex:1}}>
                                     <View >
                                         <Text style={styles.inputsTitle}>可取件日期</Text>
-                                        <Text style={styles.inputs}></Text>
+                                        <Text style={styles.inputs}>{getProductTime}</Text>
                                     </View>
                                     <View >
                                         <Text style={styles.inputsTitle}>運送方式</Text>
                                         <Text style={styles.inputs}>{order.shipping_method}</Text>
                                     </View> 
                                     <View >
-                                        <Text style={styles.inputsTitle}>{status=='Complete'?'到店取件券編號':'帳單編號'}</Text>
+                                        <Text style={styles.inputsTitle}>{status.status=='Complete'?'到店取件券編號':'帳單編號'}</Text>
                                         <Text style={styles.inputs}>#{order.order_id}</Text>
-                                        {status=='Complete'?<QRCode value={order.order_id} size={40}/>:null}
+                                        {status.status=='Complete'?<QRCode value={order.order_id} size={40}/>:null}
                                         
                                     </View>
                                 </View>

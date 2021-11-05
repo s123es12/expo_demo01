@@ -49,7 +49,13 @@ const PayDelivery = ({navigation,route}) =>{
 
     const [checkOrderAddress,setOrderAddress] = useState(true);
 
-    const [commentText,setCommentText] = useState(null);
+    const [commentText,setCommentText] = useState({date:'',phone:'',email:''});
+
+    const [date, setDate] = useState(new Date());
+    const [mode, setMode] = useState('date');
+    const [show, setShow] = useState(false);
+
+
 
     const onSubmit = data =>{
         //console.log('Comment Test: ',commentText);
@@ -205,6 +211,17 @@ const PayDelivery = ({navigation,route}) =>{
 
     },[])
 
+    const handleDatePicker = (event, date)=>{
+        //console.log(event,date);
+        if(event.type == 'dismissed'){
+            setShow(false);
+        }else if (event.type=='set'){
+            setShow(false);
+            let new_date = JSON.stringify(event.nativeEvent.timestamp).slice(1,11);
+            //console.log(new_date);
+            setCommentText({...commentText,date:new_date});
+        }
+    }
 
     const handleShippingChecked = (index)=>{
         // console.log(index);
@@ -305,7 +322,16 @@ const PayDelivery = ({navigation,route}) =>{
                         
                     </View> 
                 </View>
-                
+                {show && (
+                    <DateTimePicker
+                        testID="dateTimePicker"
+                        value={date}
+                        mode={mode}
+                        is24Hour={true}
+                        display="default"
+                        onChange={(event,date)=>handleDatePicker(event,date)}
+                    />
+                )}
                 <ScrollView>
                     <View style={{padding:25,marginBottom:120}}>
                         <View style={{backgroundColor:'white',padding:20,alignItems:'center',borderRadius:10}}>
@@ -446,12 +472,35 @@ const PayDelivery = ({navigation,route}) =>{
                         </View>
 
                         <View style={{backgroundColor:'white',marginTop:20,paddingHorizontal:20,borderRadius:10}}>
-                            <Text style={{fontWeight:'700',borderBottomWidth:1,borderBottomColor:'#d2d2d2',paddingVertical:10}}>備註</Text>
+                            <Text style={{fontWeight:'700',borderBottomWidth:1,borderBottomColor:'#d2d2d2',paddingVertical:10}}>預約收件日期</Text>
+                            <TouchableOpacity onPress={()=>setShow(true)}>
+                                <TextInput 
+                                    style={[styles.inputs,{color:'black'}]}
+                                    editable = {false}
+                                    value={commentText.date}
+                                    onChangeText={(val)=>setCommentText({...commentText,date:val})}
+                                    placeholder='預約收件日期'
+                                />
+                            </TouchableOpacity>
+                            
+                       
+                            <Text style={{fontWeight:'700',borderBottomWidth:1,borderBottomColor:'#d2d2d2',paddingVertical:10}}>收件人電郵地址</Text>
                             <TextInput 
                                 style={styles.inputs}
-                                value={commentText}
-                                onChangeText={setCommentText}
-                                placeholder='輸入備註'
+                                value={commentText.email}
+                                textContentType='emailAddress'
+                                keyboardType="email-address"
+                                
+                                onChangeText={(val)=>setCommentText({...commentText,email:val})}
+                                placeholder='收件人電郵地址'
+                            />
+                     
+                            <Text style={{fontWeight:'700',borderBottomWidth:1,borderBottomColor:'#d2d2d2',paddingVertical:10}}>收件人電話號碼</Text>
+                            <TextInput 
+                                style={styles.inputs}
+                                value={commentText.phone}
+                                onChangeText={(val)=>setCommentText({...commentText,phone:val})}
+                                placeholder='收件人電話號碼'
                             />
                         </View>
                         {error&&  <Text style={[styles.errorText,{fontSize:14}]}>{error}</Text>}
