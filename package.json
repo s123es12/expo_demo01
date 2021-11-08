@@ -41,6 +41,7 @@
     "react-dom": "16.13.1",
     "react-hook-form": "^7.18.0",
     "react-native": "~0.63.4",
+    "react-native-banner-carousel": "^1.0.3",
     "react-native-css-vh-vw": "^1.0.5",
     "react-native-dom-parser": "^1.5.3",
     "react-native-elements": "^3.4.2",

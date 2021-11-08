@@ -89,7 +89,7 @@ const Account = ({navigation,route}) =>{
         })
         .then(response=>response.json())
         .then((responseJson)=>{
-        //console.log(responseJson);
+        console.log(responseJson);
             if(responseJson.success==1){
                 setUserData(responseJson.data);
                 if(!responseJson.data.reward_total){
@@ -125,7 +125,7 @@ const Account = ({navigation,route}) =>{
                                     <FontAwesomeIcon icon={faTimes} size={30} onPress={showMemberModal}/>
                                 </View>
                                 <View style={{alignItems:'center',padding:20}}>
-                                    <QRCode value={userData.email} />
+                                    <QRCode value={userData.email} size={200}/>
                                     <Text style={{marginTop:20,fontSize:16,color:'#56585e'}}>會員編號:{userData.customer_id}</Text>
                                 </View>
                                 <View style={{flexDirection:'row',justifyContent:'space-between',paddingVertical:10,paddingHorizontal:WIDTH*0.15,alignItems:'center'}}>
@@ -172,18 +172,37 @@ const Account = ({navigation,route}) =>{
 
                     <ScrollView>
                         <TouchableOpacity onPress={()=>setMemberVisible(!isMemberVisible)}>
+                            
+                                <View style={{backgroundColor:'white',borderRadius:10}}>
+                                    <View style={{flex:1,flexDirection:'row',height:100,padding:20,alignItems:'center',justifyContent:'space-between'}}>
+                                        <Avatar rounded source={require('../../assets/profile-45x45.png')} size={'large'} />
+                                        <View style={{marginVertical:30}}>
+                                            <Text style={{marginBottom:10,fontWeight:'700',fontSize:18}}>{userData.lastname} {userData.firstname}</Text>
+                                            <Text>{userData.email}</Text>
+                                        </View>
+                                        <QRCode 
+                                            value={userData.email}
+                                            size={80}
+                                        />
+                                    </View>
+                                
 
-                            <View style={{flex:1,flexDirection:'row',height:100,backgroundColor:'white',borderRadius:10,padding:20,alignItems:'center',justifyContent:'space-between'}}>
-                                <Avatar rounded source={require('../../assets/profile-45x45.png')} size={'large'} />
-                                <View style={{marginLeft:20,marginRight:35}}>
-                                    <Text style={{marginBottom:10,fontWeight:'700',fontSize:18}}>{userData.lastname} {userData.firstname}</Text>
-                                    <Text>{userData.email}</Text>
+                                    <View style={{flexDirection:'row',justifyContent:'space-between',paddingVertical:10,paddingHorizontal:WIDTH*0.15,alignItems:'center'}}>
+                                        <View style={{flexDirection:'row',alignItems:'center'}}>
+                                            <FontAwesomeIcon icon={faDonate} color="#fdd952"/>
+                                            <Text style={{fontWeight:'700',color:'#000',marginLeft:8}}>{userPoints}</Text>
+                                        </View>
+                                        <View style={{flexDirection:'row',alignItems:'center'}}>
+                                            <FontAwesomeIcon icon={faCube} color="#c1c1c1"/>
+                                            {loadUser?<ActivityIndicator/>:
+                                            <Text style={{color:'#c1c1c1',marginLeft:8}}>{userData.custom_fields[0].custom_field_value[0].name}</Text>
+                                            }
+                                        </View>
+                                        
+                                    </View> 
                                 </View>
-                                <QRCode 
-                                    value={userData.email}
-                                    size={40}
-                                />
-                            </View>
+                           
+                            
                         </TouchableOpacity>
 
                         <View style={styles.settingList}>

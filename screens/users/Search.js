@@ -162,21 +162,10 @@ const Category = ({navigation,route}) =>{
                 <Input 
                     containerStyle={{marginLeft:10,width:WIDTH*0.95}}
                     inputContainerStyle={{paddingLeft:20,paddingRight:10,borderBottomWidth:0,backgroundColor:'white',borderRadius:10}}
-                    placeholder='搜尋'
+                    placeholder='搜尋產品/服務'
                     maxLength={30}
                     value={searchText}
                     onChangeText={(txt)=>setSearchText(txt)}
-                    rightIcon={
-                        <TouchableOpacity 
-                           
-                        >
-                            <FontAwesomeIcon 
-                                icon={faMicrophone}
-                                size={24}
-                                
-                            />
-                        </TouchableOpacity>
-                    }
                 />
              
             </View>

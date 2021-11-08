@@ -1,26 +1,24 @@
-import React, { useEffect, useRef ,useState} from 'react';
+import React, { useEffect ,useState} from 'react';
 import { 
     View,
     Text,
     Image,
     ActivityIndicator,
     TouchableOpacity,
-    FlatList,
     StyleSheet,
     Dimensions,
     ScrollView
 } from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Button } from 'react-native-elements';
-import {faBars,faSignOutAlt} from '@fortawesome/free-solid-svg-icons'
+import {faSignOutAlt,faMicrophone} from '@fortawesome/free-solid-svg-icons'
 import {SIZES} from '../../constants/theme';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faHeart } from '@fortawesome/free-regular-svg-icons';  
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import 'react-native-gesture-handler';
-import { createDrawerNavigator } from '@react-navigation/drawer'; 
+import { useIsFocused } from '@react-navigation/native';
+import Carousel from 'react-native-banner-carousel';
+import Modal from 'react-native-modal';
+import {Input} from 'react-native-elements';
+
 
 const numColumn = 2;
 const WIDTH =Dimensions.get('window').width;
@@ -33,6 +31,17 @@ const UserHome = ({navigation,route}) =>{
 
     const [storeInfo, setStoreInfo] = useState({});
 
+    const isFocused = useIsFocused();
+
+    const [banners, setBanners]=useState([]);
+
+    const [ShowBanner, setShowBanner] = useState(false);
+    const [bannerDetail, setBannerDetail] = useState();
+    const [loadBanner, setLoadBanner]=useState(true);
+    const [bannerName, setBannerName] = useState();
+
+    const [searchText, setSearchText] = useState('');
+    const [searchResult, setSearchResult] =useState([]);
 
 
     const handleLogout = () =>{
@@ -59,6 +68,31 @@ const UserHome = ({navigation,route}) =>{
           
         }).catch((err)=>console.log(err));
 
+    }
+
+    const handleBanner = (id,name) =>{
+        fetch('https://goldrich.top/api/rest/banners/'+id, {
+            method: 'GET',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization':'Bearer '+route.params.authorization,
+                
+            }
+        })
+        .then(response=>response.json())
+        .then((responseJson)=>{
+            //console.log(responseJson);
+            if(responseJson.success ==1){
+                setBannerDetail(responseJson.data[0]);
+                setBannerName(name);
+            }else{
+                
+            }
+            
+          
+        }).catch((err)=>console.log(err))
+        .finally(()=>{setLoadBanner(false); setShowBanner(true);});
     }
 
     const addProduct =(productId)=>{
@@ -131,11 +165,68 @@ const UserHome = ({navigation,route}) =>{
           
         }).catch((err)=>console.log(err));
 
+        fetch('https://goldrich.top/api/rest/banners/', {
+            method: 'GET',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization':'Bearer '+route.params.authorization,
+                
+            }
+        })
+        .then(response=>response.json())
+        .then((responseJson)=>{
+            //console.log(responseJson.data);
+            if(responseJson.success==1){
+                //console.log(responseJson.data);
+                setBanners(responseJson.data);
+            }else if(responseJson.success==0){
 
+            }
+          
+        }).catch((err)=>console.log(err))
+      
 
-    },[isLoading])
+    },[isLoading,isFocused])
 
- 
+    useEffect(()=>{
+        
+        fetch('https://goldrich.top/api/rest/products/custom_search/limit/10/page/1', {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization':'Bearer '+route.params.authorization,
+                
+            },body:JSON.stringify({
+                "sort":"name",
+                "order":"asc",
+                "filters":[
+                    {
+                        "field":"name",
+                        "operand":"like",
+                        "value":searchText
+                    },
+                ]
+            })
+        })
+        .then(response=>response.json())
+        .then((responseJson)=>{
+        // console.log(responseJson);
+            if(responseJson.success==1){
+                
+
+                
+
+                setSearchResult(responseJson.data);
+                
+                //console.log(searchResult);
+            }else if(responseJson.success==0){
+
+            }
+        }).catch((err)=>console.log(err))
+        
+    },[searchText])
     
 
     return(
@@ -149,8 +240,8 @@ const UserHome = ({navigation,route}) =>{
             <View style={{
                 backgroundColor:"#cc6a3e",
                 paddingBottom:40,
-                borderBottomLeftRadius:10,
-                borderBottomRightRadius:10,
+                // borderBottomLeftRadius:10,
+                // borderBottomRightRadius:10,
                 height:200
             }}>
                 
@@ -209,13 +300,57 @@ const UserHome = ({navigation,route}) =>{
                 </View> 
 
             </View>
-            <ScrollView >
-            <View style={{height:200,padding:20,paddingBottom:10}}>
+
+            <Modal
+                isVisible={ShowBanner}
+                animationIn={'slideInLeft'}
+                animationOut={'slideOutRight'}
+            >
                 
-                <Image
+                    {loadBanner?<ActivityIndicator/>
+                    :
+                    <View style={{backgroundColor:'#fff',padding:10,justifyContent:'space-around'}}>
+                        <Text style={{fontSize:24,textAlign:'center',color:'#cc6a3e'}}>{bannerName}</Text>
+                        <Image style={{height:'50%',width:'100%'}} resizeMode={'contain'} source={{uri:bannerDetail.image}}/>
+                        <View style={{flexDirection:'row',justifyContent:'center'}}>
+                            <Text style={{fontSize:20,color:'#cc6a3e'}}>優惠券: </Text>
+                            <Text style={{fontSize:20,color:'red',fontWeight:'700'}}>{bannerDetail.title}</Text>
+                        </View>
+
+                        <Button title="OK" buttonStyle={{backgroundColor:'#cc6a3e',width:WIDTH*0.5,alignSelf:'center'}} onPress={()=>setShowBanner(false)}/>
+                    </View>
+                }
+
+            </Modal>
+
+            <ScrollView >
+            <View style={{marginBottom:10,backgroundColor:'#fff'}}>
+                
+                {/* <Image
                     source={require("../../assets/images/L01.jpeg")}
                     style={{height:'100%',width:'100%',resizeMode:'cover',borderRadius:10}}
-                />
+                /> */}
+                <Carousel
+                    autoplay={true}
+                    autoplayTimeout={5000}
+                    loop={true}
+                    index={0}
+                    pageSize={WIDTH}
+                    showsPageIndicator={false}
+                >
+                    {banners.map((item,index)=>{
+                        if(item.status==1){
+                            return(
+                                <TouchableOpacity key={item+index} onPress={()=>handleBanner(item.banner_id,item.name)}>
+                                    <Text style={{height:40,padding:10,textAlign:'center',color:'#cc6a3e'}}>{item.name}</Text>
+                                </TouchableOpacity>
+                            )
+                        }else{
+                            null;
+                        }
+                        
+                    })}
+                </Carousel>
             </View>
               
               
@@ -227,8 +362,46 @@ const UserHome = ({navigation,route}) =>{
 
                 <ScrollView>
                     <View style={{flexDirection:'row',flexWrap:'wrap',justifyContent:'space-between',paddingHorizontal:WIDTH*0.05}}>
+                    <Input 
+                        containerStyle={{width:'100%'}}
+                        inputContainerStyle={{paddingLeft:20,paddingRight:10,borderBottomWidth:0,backgroundColor:'white',borderRadius:10}}
+                        placeholder='搜尋產品/服務'
+                        maxLength={30}
+                        value={searchText}
+                        onChangeText={(txt)=>setSearchText(txt)}
                         
-                        {isLoading ?<ActivityIndicator/> : product_lists.map((item,index)=>{
+                    />
+                        {isLoading ?<ActivityIndicator/> : searchResult.length>=1?searchResult.map((item,index)=>{
+                            return (
+                                <TouchableOpacity key={item.key?item.key:item+index} onPress={()=>navigation.navigate('ServiceProduct',{id:item.id,authorization:route.params.authorization})}>
+                                <View style={{borderRadius:8,padding:10,marginVertical:10,width:WIDTH*0.43,height:HEIGHT*0.3,backgroundColor:'#fff'}}>
+                                
+                                    <Image source={{uri:item.original_image}} style={{height:'70%',width:'100%'}} resizeMode='cover'/>
+
+                                    <View style={{flexDirection:'row',justifyContent:'space-between',alignItems:'center',paddingVertical:5}}>
+                                        <Text>{item.name}</Text>
+                                        <TouchableOpacity
+                                            onPress={()=>console.log("heart")}
+                                        >
+                                            <FontAwesomeIcon 
+                                                icon={faHeart} color='#cc6a3e' size={20}/>
+                                        </TouchableOpacity>
+                                    </View>
+                                    <View style={{flexDirection:'row',justifyContent:'space-between',alignItems:'center',paddingVertical:5}}>
+                                        <Text style={{color:'#cc6a3e'}}>${item.price.toFixed(1)}</Text>
+                                        <Button 
+                                            buttonStyle={{backgroundColor:'#623f31',color:"#000",height:20,padding:12,borderRadius:5}}
+                                            disabled={item.quantity<=0?true:false}
+                                            title="加入購物車"
+                                            titleStyle={{fontSize:12}}
+                                            onPress={()=>addProduct(item.product_id)}
+                                        />
+                                    </View>
+                                </View>
+                            </TouchableOpacity>
+                        )
+                        })
+                        :product_lists.map((item,index)=>{
                             return (
                                 <TouchableOpacity key={item.key?item.key:item+index} onPress={()=>navigation.navigate('ServiceProduct',{id:item.id,authorization:route.params.authorization})}>
                                 <View style={{borderRadius:8,padding:10,marginVertical:10,width:WIDTH*0.43,height:HEIGHT*0.3,backgroundColor:'#fff'}}>
