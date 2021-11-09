@@ -84,7 +84,7 @@ const ForgetAccount =({navigation,route})=>{
                 </Modal>
           
 
-            <Text style={{height:100}}>LOGO</Text>
+            <Text style={{height:100}}></Text>
             <Text style={[FONTS.h2,{fontWeight:"700"}]}>重設密碼</Text>
             <View style={{marginBottom:5,marginTop:20}}>
                 <Text style={[FONTS.h4]}>我們收到你的重設密碼的通知, 請根據指示重設密碼</Text>

@@ -89,7 +89,7 @@ const LoginByPhone= ({ navigation,route }) => {
      
         <View style={[styles.container]}>
         
-        <Text style={{height:100}}>LOGO</Text>
+        <Text style={{height:100}}></Text>
         <Text style={[FONTS.h2,{fontWeight:"700"}]}>歡迎回來</Text>
         <Text style={[FONTS.h3,{marginBottom:60}]}>注册你的帳戶密碼</Text>
 

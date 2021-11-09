@@ -74,6 +74,7 @@ const Onboarding =({navigation,route})=>{
         const config ={
             iosClientId: '1063096795567-v3gepjeecgpbonm8u2roqam6sn55b264.apps.googleusercontent.com',
             androidClientId:`1063096795567-clla3v10p2tvq8nl5c01eurkidc0nrg6.apps.googleusercontent.com`,
+            androidStandaloneAppClientId:`1063096795567-clla3v10p2tvq8nl5c01eurkidc0nrg6.apps.googleusercontent.com`,
             scopes: ['profile', 'email'],
             
         }

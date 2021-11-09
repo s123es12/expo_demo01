@@ -298,7 +298,7 @@ const UserHome = ({navigation,route}) =>{
                         source={{uri:storeInfo.store_image}}
                     />
                 </View> 
-
+                 
             </View>
 
             <Modal
@@ -341,7 +341,7 @@ const UserHome = ({navigation,route}) =>{
                     {banners.map((item,index)=>{
                         if(item.status==1){
                             return(
-                                <TouchableOpacity key={item+index} onPress={()=>handleBanner(item.banner_id,item.name)}>
+                                <TouchableOpacity  key={item+index} onPress={()=>handleBanner(item.banner_id,item.name)}>
                                     <Text style={{height:40,padding:10,textAlign:'center',color:'#cc6a3e'}}>{item.name}</Text>
                                 </TouchableOpacity>
                             )
@@ -351,6 +351,7 @@ const UserHome = ({navigation,route}) =>{
                         
                     })}
                 </Carousel>
+                
             </View>
               
               
@@ -361,16 +362,16 @@ const UserHome = ({navigation,route}) =>{
                 <View style={{marginBottom:220}}>
 
                 <ScrollView>
-                    <View style={{flexDirection:'row',flexWrap:'wrap',justifyContent:'space-between',paddingHorizontal:WIDTH*0.05}}>
                     <Input 
-                        containerStyle={{width:'100%'}}
-                        inputContainerStyle={{paddingLeft:20,paddingRight:10,borderBottomWidth:0,backgroundColor:'white',borderRadius:10}}
-                        placeholder='搜尋產品/服務'
-                        maxLength={30}
-                        value={searchText}
-                        onChangeText={(txt)=>setSearchText(txt)}
-                        
+                            containerStyle={{width:'100%',paddingHorizontal:WIDTH*0.05,marginRight:0}}
+                            inputContainerStyle={{paddingLeft:20,paddingRight:10,borderBottomWidth:0,backgroundColor:'white',borderRadius:10}}
+                            placeholder='搜尋產品/服務'
+                            
+                            value={searchText}
+                            onChangeText={(txt)=>setSearchText(txt)}
                     />
+                    <View style={{flexDirection:'row',flexWrap:'wrap',justifyContent:'space-between',paddingHorizontal:WIDTH*0.05}}>
+                    
                         {isLoading ?<ActivityIndicator/> : searchResult.length>=1?searchResult.map((item,index)=>{
                             return (
                                 <TouchableOpacity key={item.key?item.key:item+index} onPress={()=>navigation.navigate('ServiceProduct',{id:item.id,authorization:route.params.authorization})}>

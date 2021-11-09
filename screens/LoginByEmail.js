@@ -130,7 +130,7 @@ const LoginByEmail = ({ navigation ,route}) => {
      
         <View style={[styles.container]}>
         
-        <Text style={{height:100}}>LOGO</Text>
+        <Text style={{height:100}}></Text>
         <Text style={[FONTS.h2,{fontWeight:"700"}]}>歡迎回來</Text>
         <Text style={[FONTS.h3,{marginBottom:60}]}>登入你的帳戶</Text>
 
