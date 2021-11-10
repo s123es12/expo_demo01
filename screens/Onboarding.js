@@ -131,10 +131,7 @@ const Onboarding =({navigation,route})=>{
             })
        
     }
-    const googleSignin = async()=>{
-        
-        
-    }
+  
 
     async function logIn() {
         try {
@@ -200,12 +197,12 @@ const Onboarding =({navigation,route})=>{
         */
        <View style={{flex:1,padding:SIZES.padding,marginTop:40}}>
             <View style={{flexDirection:'column'}}>
-                <Text style={{
+                {/* <Text style={{
                         fontSize:SIZES.h2,
                         color:"black",
                         fontWeight:'700',
                         
-                    }}>{storeInfo.store_name}</Text>
+                    }}>{storeInfo.store_name}</Text> */}
                 <Image
                     style={{
                         height:175,

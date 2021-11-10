@@ -343,15 +343,15 @@ const ServiceProduct = ({navigation,route}) =>{
                                 <View style={{flexDirection:'row',flex:1,alignItems:'center'}}>
                                     <Button 
                                         title="-" 
-                                        titleStyle={{alignItems:'center'}} 
-                                        buttonStyle={{borderTopLeftRadius:5,borderBottomLeftRadius:5,width:30,padding:12,height:20}}
+                                        titleStyle={{alignItems:'center',fontSize:12}} 
+                                        buttonStyle={{borderTopLeftRadius:5,borderBottomLeftRadius:5,width:30,paddingHorizontal:12,height:'auto'}}
                                         onPress={handleReduction}
                                     />
                                     <Text style={{marginHorizontal:10,}}>{productCount}</Text>
                                     <Button  
                                         title="+" 
-                                        titleStyle={{alignItems:'center'}} 
-                                        buttonStyle={{borderTopRightRadius:5,borderBottomRightRadius:5,width:30,padding:12,height:20}}
+                                        titleStyle={{alignItems:'center',fontSize:12}} 
+                                        buttonStyle={{borderTopRightRadius:5,borderBottomRightRadius:5,width:30,paddingHorizontal:12,height:'auto'}}
                                         onPress={()=>handleAddition(productInfo.quantity)}
                                     />
                                 </View>
@@ -441,7 +441,7 @@ const ServiceProduct = ({navigation,route}) =>{
                                             <View style={{flexDirection:'row',justifyContent:'space-between',alignItems:'center',paddingVertical:5}}>
                                                 <Text style={{color:'#cc6a3e'}}>${item.price.toFixed(1)}</Text>
                                                 <Button 
-                                                    buttonStyle={{backgroundColor:'#623f31',color:"#000",height:20,padding:12,borderRadius:5}}
+                                                    buttonStyle={{backgroundColor:'#623f31',color:"#000",height:'auto',paddingHorizontal:12,borderRadius:5}}
                                                     disabled={item.quantity=='0'?true:false}
                                                     title="加入購物車"
                                                     titleStyle={{fontSize:12}}
