@@ -388,10 +388,10 @@ const UserHome = ({navigation,route}) =>{
                                                 icon={faHeart} color='#cc6a3e' size={20}/>
                                         </TouchableOpacity>
                                     </View>
-                                    <View style={{flexDirection:'row',justifyContent:'space-between',alignItems:'center',paddingVertical:5}}>
+                                    <View style={{flexDirection:'row',justifyContent:'space-between',alignItems:'center'}}>
                                         <Text style={{color:'#cc6a3e'}}>${item.price.toFixed(1)}</Text>
                                         <Button 
-                                            buttonStyle={{backgroundColor:'#623f31',color:"#000",height:20,padding:12,borderRadius:5}}
+                                            buttonStyle={{backgroundColor:'#623f31',color:"#000",height:20,borderRadius:5,height:'auto'}}
                                             disabled={item.quantity<=0?true:false}
                                             title="加入購物車"
                                             titleStyle={{fontSize:12}}

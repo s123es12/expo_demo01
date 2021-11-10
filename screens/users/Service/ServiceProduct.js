@@ -358,9 +358,10 @@ const ServiceProduct = ({navigation,route}) =>{
                                 <View style={{flex:1}}>
                                     <Button 
                                         disabled={productInfo.quantity>=1?false:true}
-                                        buttonStyle={{backgroundColor:'#623f31',color:"#000",height:20,paddingVertical:13,paddingHorizontal:15,borderRadius:5}}
+                                        
+                                        buttonStyle={{backgroundColor:'#623f31',color:"#000",height:'auto',paddingHorizontal:15,borderRadius:5}}
                                         title="加入購物車"
-                                        titleStyle={{fontSize:14}}
+                                        titleStyle={{fontSize:12}}
                                         onPress={addProduct}
                                     />
                                 </View>
@@ -394,9 +395,9 @@ const ServiceProduct = ({navigation,route}) =>{
                             <View style={{flexDirection:'row',justifyContent:'space-between',paddingVertical:10}}>
                                 <View style={{paddingLeft:10}}>
                                     <Button 
-                                        buttonStyle={{backgroundColor:'#623f31',color:"#000",height:20,paddingVertical:13,paddingHorizontal:15,borderRadius:5}}
+                                        buttonStyle={{backgroundColor:'#623f31',color:"#000",height:'auto',paddingHorizontal:15,borderRadius:5}}
                                         title="寫下評論"
-                                        titleStyle={{fontSize:14}}
+                                        titleStyle={{fontSize:12}}
                                         onPress={()=>navigation.navigate('ServiceComment',{id:productInfo.product_id,authorization:route.params.authorization})}
                                     />
                                 </View>

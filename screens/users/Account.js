@@ -92,6 +92,7 @@ const Account = ({navigation,route}) =>{
         console.log(responseJson);
             if(responseJson.success==1){
                 setUserData(responseJson.data);
+                
                 if(!responseJson.data.reward_total){
                     let points_list = responseJson.data.rewards;
                     let point =0;
@@ -171,12 +172,13 @@ const Account = ({navigation,route}) =>{
                 <View style={{padding:20}}>
 
                     <ScrollView>
+                    {loadUser?<ActivityIndicator/>:
                         <TouchableOpacity onPress={()=>setMemberVisible(!isMemberVisible)}>
                             
                                 <View style={{backgroundColor:'white',borderRadius:10}}>
-                                    <View style={{flex:1,flexDirection:'row',height:100,padding:20,alignItems:'center',justifyContent:'space-between'}}>
+                                    <View style={{flex:1,flexDirection:'row',height:100,padding:20,justifyContent:'space-between'}}>
                                         <Avatar rounded source={require('../../assets/profile-45x45.png')} size={'large'} />
-                                        <View style={{marginVertical:30}}>
+                                        <View style={{marginVertical:10,flexDirection:'column'}}>
                                             <Text style={{marginBottom:10,fontWeight:'700',fontSize:18}}>{userData.lastname} {userData.firstname}</Text>
                                             <Text>{userData.email}</Text>
                                         </View>
@@ -204,7 +206,7 @@ const Account = ({navigation,route}) =>{
                            
                             
                         </TouchableOpacity>
-
+                        }
                         <View style={styles.settingList}>
                             <TouchableOpacity onPress={()=>navigation.navigate('PersonInfo',{userDetail:userData,authorization:route.params.authorization})}>
                                 <View style={styles.settingItem}>

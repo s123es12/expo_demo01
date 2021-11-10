@@ -196,7 +196,7 @@ const Category = ({navigation,route}) =>{
                                             <View style={{flexDirection:'row',justifyContent:'space-between',alignItems:'center',paddingVertical:5}}>
                                                 <Text style={{color:'#cc6a3e',fontSize:18,fontWeight:'700',marginRight:5}}>${item.price.toFixed(1)}</Text>
                                                 <Button 
-                                                    buttonStyle={{backgroundColor:'#623f31',color:"#000",height:20,padding:12,borderRadius:5}}
+                                                    buttonStyle={{backgroundColor:'#623f31',color:"#000",height:'auto',paddingHorizontal:12,borderRadius:5}}
                                                     title="加入購物車"
                                                     titleStyle={{fontSize:12}}
                                                     onPress={()=>addProduct(item.product_id)}
