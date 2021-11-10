@@ -19,12 +19,14 @@ import * as Google from 'expo-google-app-auth';
 const Onboarding =({navigation,route})=>{
 
     const [authorization,setAuthorization] = useState(null);
-    const [googleSubmitting, setGoogleSubmitting] = useState(false);
+    
     const [message, setMessage] = useState();
     const [messageType, setMessageType] =useState();
     const [storeInfo,setStoreInfo] = useState({});
     const [resetAuth, setResetAuth]=useState(false);
 
+    const [userGoogleInfo,setUserGoogleInfo] = useState({});
+    const [googleSubmitting, setGoogleSubmitting] = useState(false);
 
     useEffect(()=>{
         
@@ -72,15 +74,17 @@ const Onboarding =({navigation,route})=>{
     const handleGoogleSignin = async () =>{
         setGoogleSubmitting(true);
         const config ={
-            iosClientId: '1063096795567-v3gepjeecgpbonm8u2roqam6sn55b264.apps.googleusercontent.com',
-            androidClientId:`1063096795567-clla3v10p2tvq8nl5c01eurkidc0nrg6.apps.googleusercontent.com`,
+            iosStandaloneAppClientId: '1063096795567-v3gepjeecgpbonm8u2roqam6sn55b264.apps.googleusercontent.com',
             androidStandaloneAppClientId:`1063096795567-clla3v10p2tvq8nl5c01eurkidc0nrg6.apps.googleusercontent.com`,
+            androidClientId: `1063096795567-g273bevnp3bbt2v0cef49luvo7v0hi7u.apps.googleusercontent.com`,
+            iosClientId: `1063096795567-kbqgahiqk83oh6chop9nspr7nuqjnif5.apps.googleusercontent.com`,
             scopes: ['profile', 'email'],
             
         }
 
         Google.logInAsync(config)
             .then((result)=>{
+                console.log(result)
                 const {type,accessToken, user} = result;
                 
                 if(type=='success'){
@@ -121,12 +125,16 @@ const Onboarding =({navigation,route})=>{
             })
             .catch(error=>{
                 console.log(error);
-                handleMessage('An error occurred. Check your network and try again');
+                handleMessage('An error occurred. Check your network and try again',error);
                 setGoogleSubmitting(false);
+                setGoogleSubmitting(true);
             })
        
     }
-
+    const googleSignin = async()=>{
+        
+        
+    }
 
     async function logIn() {
         try {
@@ -244,8 +252,8 @@ const Onboarding =({navigation,route})=>{
                         titleStyle={{color:'#000',marginLeft:10,fontSize:18,fontWeight:"bold"}}
                         title="使用Google帳戶登入"
                         onPress={handleGoogleSignin}
-                        
                     />
+                   
                 
             )}
             {googleSubmitting &&(
@@ -266,6 +274,7 @@ const Onboarding =({navigation,route})=>{
                    onPress={handleGoogleSignin}
                    
                />
+                
             )}
             </View>
             <Text style={[styles.errorText,{fontSize:16,color:messageType=='SUCCESS'?'green':'red'}]}>{message}</Text>
