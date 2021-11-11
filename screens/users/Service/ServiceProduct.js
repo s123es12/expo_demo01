@@ -383,7 +383,7 @@ const ServiceProduct = ({navigation,route}) =>{
 
                         <View style={{flexDirection:'column',backgroundColor:'#fff',padding:15,borderRadius:10,marginVertical:15}}>
                             <View style={{flexDirection:'row',alignItems:'center',borderBottomWidth:1,borderBottomColor:'#ccc',paddingBottom:15,paddingLeft:10}}>
-                                <Rating style={{alignItems:'flex-start'}} showRating={false} imageSize={20} fractions={1} startingValue={productInfo.rating} readonly={true}/>
+                                <Rating style={{alignItems:'flex-start'}} type='star' showRating={false} imageSize={20} fractions={1} startingValue={productInfo.rating} readonly={true}/>
                                 <Text style={{color:'#623f31',fontSize:18,fontWeight:'700',marginLeft:10}}>{productInfo.rating}</Text>
                             </View>
                                 
