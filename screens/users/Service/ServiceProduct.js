@@ -5,24 +5,19 @@ import {
     Image,
     ActivityIndicator,
     TouchableOpacity,
-    FlatList,
     StyleSheet,
     Dimensions,
     ScrollView,
-    TextInput
 } from 'react-native';
 
-import {faBars,faPeopleArrows,faMicrophone, faLiraSign,faTimes,faCheckCircle,faUndo,faChevronRight,
-faChevronLeft,faMapPin,faMapMarkerAlt,faAngleDoubleDown, faMapMarkedAlt,faThLarge,
-faLevelDownAlt,faSortAmountDown,faShareAlt,faCaretRight} from '@fortawesome/free-solid-svg-icons'
+import {
+faChevronLeft,faShareAlt,faCaretRight} from '@fortawesome/free-solid-svg-icons'
 import {SIZES} from '../../../constants/theme';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faHeart } from '@fortawesome/free-regular-svg-icons';  
-import Modal from "react-native-modal";
-import { Button,Avatar,ListItem ,CheckBox,Rating} from 'react-native-elements';
-import QRCode from 'react-native-qrcode-svg';
-import DateTimePicker from '@react-native-community/datetimepicker';
-import { set } from 'react-hook-form';
+
+import { Button,Rating} from 'react-native-elements';
+
 
 
 
@@ -237,7 +232,7 @@ const ServiceProduct = ({navigation,route}) =>{
 
 
 
-
+               {isLoading?<ActivityIndicator/>:
 
                 <ScrollView>
                 <View style={{
@@ -282,9 +277,9 @@ const ServiceProduct = ({navigation,route}) =>{
                 
                 
 
-                
+           
                 <View style={{width:WIDTH,height:300,marginTop:-10}}>
-                    <Image source={isLoading?<ActivityIndicator/>:{uri:productInfo.image}} style={{height:'100%',width:'100%'}} resizeMode='cover'/>
+                    <Image source={{uri:productInfo.image}} style={{height:'100%',width:'100%'}} resizeMode='cover'/>
                 </View>
 
                
@@ -294,7 +289,7 @@ const ServiceProduct = ({navigation,route}) =>{
                         <View style={{flexDirection:'column',backgroundColor:'#fff',padding:15,borderRadius:10,marginTop:20,marginBottom:15}}>
                             <View style={{flexDirection:'row',justifyContent:'space-between',alignItems:'center'}}>
                                 <View style={{flex:1,flexDirection:'row',justifyContent:'space-between',alignItems:'center'}}>
-                                    <Text style={{fontWeight:'700',color:'#000',fontSize:20}}>{isLoading?<ActivityIndicator/>:productInfo.name}</Text>
+                                    <Text style={{fontWeight:'700',color:'#000',fontSize:20}}>{productInfo.name}</Text>
                                     <Text style={{color:'#fff',backgroundColor:'#d9a21b',borderRadius:8,paddingHorizontal:10,paddingVertical:2}}>熱門</Text>
                                 </View>
                                 <View style={{flex:1,alignItems:'flex-end'}}>
@@ -302,7 +297,7 @@ const ServiceProduct = ({navigation,route}) =>{
                                 </View>
                             </View>
                             <View style={{borderBottomWidth:1,borderBottomColor:'#d3d3d3',paddingBottom:10}}>
-                                <Text style={{fontSize:20,fontWeight:'700'}}>${isLoading?<ActivityIndicator/>:productInfo.price.toFixed(1)}</Text>
+                                <Text style={{fontSize:20,fontWeight:'700'}}>{productInfo.price.toFixed(1)}</Text>
                             </View>
                             <View style={{flexDirection:'row',justifyContent:'space-between',paddingVertical:10}}>
                                 {/* <Text style={{fontWeight:'700'}}>預約收件時間</Text> */}
@@ -388,8 +383,8 @@ const ServiceProduct = ({navigation,route}) =>{
 
                         <View style={{flexDirection:'column',backgroundColor:'#fff',padding:15,borderRadius:10,marginVertical:15}}>
                             <View style={{flexDirection:'row',alignItems:'center',borderBottomWidth:1,borderBottomColor:'#ccc',paddingBottom:15,paddingLeft:10}}>
-                                <Rating style={{alignItems:'flex-start'}} showRating={false} imageSize={20} fractions={1} startingValue={isLoading?<ActivityIndicator/>:productInfo.rating} readonly={true}/>
-                                <Text style={{color:'#623f31',fontSize:18,fontWeight:'700',marginLeft:10}}>{isLoading?<ActivityIndicator/>:productInfo.rating}</Text>
+                                <Rating style={{alignItems:'flex-start'}} showRating={false} imageSize={20} fractions={1} startingValue={productInfo.rating} readonly={true}/>
+                                <Text style={{color:'#623f31',fontSize:18,fontWeight:'700',marginLeft:10}}>{productInfo.rating}</Text>
                             </View>
                                 
                             <View style={{flexDirection:'row',justifyContent:'space-between',paddingVertical:10}}>
@@ -405,20 +400,20 @@ const ServiceProduct = ({navigation,route}) =>{
                                     <TouchableOpacity  onPress={()=>navigation.navigate('ServiceCommentList',{id:productInfo.product_id,info:productInfo,authorization:route.params.authorization})}>
                                         <View style={{flexDirection:'row',alignItems:'center'}}>
                                             <Text>(</Text>
-                                            <Text style={{marginLeft:5}}>{isLoading?<ActivityIndicator/>:productInfo.reviews.review_total}則評論</Text>
+                                            <Text style={{marginLeft:5}}>{productInfo.reviews.review_total}則評論</Text>
                                             <FontAwesomeIcon icon={faCaretRight} size={20} />
                                             <Text>)</Text>
                                         </View>
                                     </TouchableOpacity>
-                                   
+                
                                 </View>
                             </View>
-                            
+                
                         </View>
-                        
+                
                     </View>
                 </View>
-                
+
                         <View style={{paddingBottom:25,paddingLeft:25}}>
                             <Text style={{fontWeight:'700',paddingBottom:8}}>您可能感興趣</Text>
                             <ScrollView horizontal>
@@ -452,14 +447,14 @@ const ServiceProduct = ({navigation,route}) =>{
                                     </TouchableOpacity>
                                     )
                                 })}
-                            </ScrollView>
-                        </View>
-
-                                
-
-
-
                 </ScrollView>
+                </View>
+
+                
+               
+
+
+                </ScrollView>}
             </View>
           
 

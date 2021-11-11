@@ -6,7 +6,8 @@ import {
     StyleSheet,
     Dimensions,
     ScrollView,
-
+    Linking,
+    Platform
 } from 'react-native';
 import {faTimes,faChevronRight,faDonate,faCube,faSms} from '@fortawesome/free-solid-svg-icons'
 import {SIZES} from '../../constants/theme';
@@ -46,10 +47,19 @@ const Account = ({navigation,route}) =>{
     const handleContact = () =>{
         let store_name = storeDetail.store_name.trim();
         let text= '你好 我想問關於'+store_name+'的資料'
-        if(loadStore==false){
-            WebBrowser.openBrowserAsync(`https://api.whatsapp.com/send/?phone=852${storeDetail.store_telephone}&text=${text}&app_absent=0`);
-        }else{
-            setTimeout(()=> WebBrowser.openBrowserAsync(`https://api.whatsapp.com/send/?phone=852${text}&text&app_absent=0`),2000)
+        if(Platform.OS =='ios'){
+            if(loadStore==false){
+                Linking.openURL(`https://api.whatsapp.com/send/?phone=852${storeDetail.store_telephone}&text=${text}&app_absent=0`);
+            }else{
+                setTimeout(()=> Linking.openURL(`https://api.whatsapp.com/send/?phone=852${text}&text&app_absent=0`),2000)
+            }
+        }else if (Platform.OS=='android'){
+
+            if(loadStore==false){
+                WebBrowser.openBrowserAsync(`https://api.whatsapp.com/send/?phone=852${storeDetail.store_telephone}&text=${text}&app_absent=0`);
+            }else{
+                setTimeout(()=> WebBrowser.openBrowserAsync(`https://api.whatsapp.com/send/?phone=852${text}&text&app_absent=0`),2000)
+            }
         }
     }
 

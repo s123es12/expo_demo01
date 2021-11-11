@@ -7,7 +7,8 @@ import {
     Dimensions,
     ScrollView,
     TextInput,
-    ActivityIndicator
+    ActivityIndicator,
+    Platform
 } from 'react-native';
 import {
     faChevronLeft,
@@ -358,20 +359,27 @@ const PayAddress = ({navigation,route}) =>{
                             </View>
                             <View style={{marginBottom:5}}>
                             <Text style={styles.inputTitle} >所在國家</Text>
+                                    <TextInput 
+                                        style={styles.inputs}
+                                        editable={false}
+                                        value={selectedCountryId}
+                                        
+                                    />
                                 <Picker
                                     style={{ 
                                         backgroundColor:'#f2f2f2',
                                         borderRadius:4,
                                         padding:20,
                                         paddingLeft:36,
-                                    
+                                        display:Platform.OS=='ios'?'none':'flex'
                                     }}
                                     enabled={false}
                                     itemStyle={{
                                         fontSize:16,
                                         color:'#d3835f',
                                         fontWeight:'700',
-                                        marginLeft:36
+                                        marginLeft:36,
+                                       
                                     }}
                                     
                                     selectedValue={selectedCountryId}
@@ -401,13 +409,19 @@ const PayAddress = ({navigation,route}) =>{
                             </View>
                             <View style={{marginBottom:5}}>
                             <Text style={styles.inputTitle} >地區或省份</Text>
+                                    <TextInput 
+                                        style={styles.inputs}
+                                        editable={false}
+                                        value={selectedZoneId}
+                                        
+                                    />
                             <Picker
                                         style={{ 
                                             backgroundColor:'#f2f2f2',
                                             borderRadius:4,
                                             padding:20,
                                             paddingLeft:36,
-                                        
+                                            display:Platform.OS=='ios'?'none':'flex'
                                         }}
                                         enabled={false}
                                         itemStyle={{
@@ -546,13 +560,19 @@ const PayAddress = ({navigation,route}) =>{
                             </View>
                             <View style={{marginBottom:5}}>
                             <Text style={styles.inputTitle} >所在國家</Text>
+                                    <TextInput 
+                                        style={styles.inputs}
+                                        editable={false}
+                                        value={selectedCountryId2}
+                                        
+                                    />
                                 <Picker
                                     style={{ 
                                         backgroundColor:'#f2f2f2',
                                         borderRadius:4,
                                         padding:20,
                                         paddingLeft:36,
-                                    
+                                        display:Platform.OS=='ios'?'none':'flex'
                                     }}
                                     enabled={false}
                                     itemStyle={{
@@ -589,13 +609,19 @@ const PayAddress = ({navigation,route}) =>{
                             </View>
                             <View style={{marginBottom:5}}>
                             <Text style={styles.inputTitle} >地區或省份</Text>
+                            <TextInput 
+                                        style={styles.inputs}
+                                        editable={false}
+                                        value={selectedZoneId2}
+                                        
+                                    />
                             <Picker
                                         style={{ 
                                             backgroundColor:'#f2f2f2',
                                             borderRadius:4,
                                             padding:20,
                                             paddingLeft:36,
-                                        
+                                            display:Platform.OS=='ios'?'none':'flex'
                                         }}
                                         enabled={false}
                                         itemStyle={{
