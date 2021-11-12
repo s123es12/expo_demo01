@@ -316,7 +316,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "host.exp.exponent";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.goldrichtop.goldrichtop";
 				PRODUCT_NAME = exponent;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -342,7 +342,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "host.exp.exponent";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.goldrichtop.goldrichtop";
 				PRODUCT_NAME = exponent;
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
