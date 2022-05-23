@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Button,
   Image,
@@ -7,24 +7,24 @@ import {
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer, DefaultTheme } from "@react-navigation/native";
 import 'react-native-gesture-handler';
-import { createDrawerNavigator } from '@react-navigation/drawer'; 
+import { createDrawerNavigator } from '@react-navigation/drawer';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import {
-  BookingDetail, 
+  BookingDetail,
   Onboarding,
   Home,
   Register,
   CheckAccount,
   LoginByEmail,
   LoginByPhone,
-  ForgetAccount, 
+  ForgetAccount,
   ResetPassword,
 
 } from "./screens/";
-import {User, UserHome} from './screens/users';
+import { User, UserHome } from './screens/users';
 import addNewAddress from './screens/users/Address/addNewAddress';
 import editAddress from './screens/users/Address/editAddress';
-import {COLORS, SIZES, icons} from "./constants";
+import { COLORS, SIZES, icons } from "./constants";
 import Tabs from "./navigation/tabs";
 import PersonInfo from "./screens/users/PersonInfo";
 import Address from "./screens/users/Address";
@@ -42,249 +42,292 @@ import PaymentAddressList from "./screens/users/Payment/PaymentAddressList";
 import PaymentResult from "./screens/users/Payment/PaymentResult";
 import { RootSiblingParent } from 'react-native-root-siblings';
 
-const theme={
+
+
+
+
+const theme = {
   ...DefaultTheme,
-  colors:{
+  colors: {
     ...DefaultTheme.colors,
-    border:"transparent",
+    border: "transparent",
   }
 }
-const Stack =createStackNavigator();
+const Stack = createStackNavigator();
 
 const Drawer = createDrawerNavigator();
 
 function myDrawer() {
   return (
-    <Drawer.Navigator initialRouteName='UserHome' screenOptions={{drawerPosition:'left'}}>
+    <Drawer.Navigator initialRouteName='UserHome' screenOptions={{ drawerPosition: 'left' }}>
       <Drawer.Screen name="UserHome" component={UserHome} />
       <Drawer.Screen name="Article" component={UserHome} />
     </Drawer.Navigator>
   );
 }
 
-const App =({navigation})=>{
+const App = ({ navigation }) => {
+  const [authorization, setAuthorization] = useState(null);
+  const [storeInfo, setStoreInfo] = useState(null);
+  useEffect(() => {
+
+    fetch('https://goldrich.top/api/rest/oauth2/token/client_credentials', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': 'Basic c2hvcHBpbmdfb2F1dGhfY2xpZW50OnNob3BwaW5nX29hdXRoX3NlY3JldA=='
+      }
+    })
+      .then(response => response.json())
+      .then((responseJson) => {
+
+        setAuthorization(responseJson.data.access_token);
+        fetch('https://goldrich.top/api/rest/stores/0', {
+          method: 'GET',
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + responseJson.data.access_token,
+
+          }
+        })
+          .then(response => response.json())
+          .then((responseJson) => {
+            if (responseJson.success == 1) {
+              setStoreInfo(responseJson.data);
+            } else if (responseJson.success == 0) {
+
+            }
+
+          }).catch((err) => console.log(err));
+      }).catch((err) => console.log(err));
+
+  }, [])
+
+
   return (
-    
+
     <NavigationContainer theme={theme}>
 
-     
+      {authorization == null || storeInfo == null ? null :
+        <Stack.Navigator
 
+          initialRouteName="User"
+        >
 
-      <Stack.Navigator
-        
-       initialRouteName="Onboarding"
-      >
-        
-        <Stack.Screen
-          name="Onboarding"
-          component={Onboarding}
-          options={{
-            headerShown:false,
-            title:"",
-            headerStyle:{
-              backgroundColor:COLORS.white
-            },
-            headerLeft:null,
-            headerRight:()=>{
-              return(
+          <Stack.Screen
+            name="Onboarding"
+            component={Onboarding}
+            options={{
+              headerShown: false,
+              title: "",
+              headerStyle: {
+                backgroundColor: COLORS.white
+              },
+              headerLeft: null,
+              headerRight: () => {
+                return (
+                  <TouchableOpacity
+                    style={{ marginRight: SIZES.padding }}
+                    onPress={() => console.log("Pressed App")}
+                  >
+                    <Image
+                      source={require("./assets/icons/menu.png")}
+
+                      resizeMode="contain"
+                      style={{
+                        width: 25,
+                        height: 25,
+
+                      }}
+                    />
+
+                  </TouchableOpacity>
+
+                )
+              }
+            }}
+          />
+          <Stack.Screen
+            name="BookingDetail"
+            component={BookingDetail}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="Register"
+            component={Register}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="CheckAccount"
+            component={CheckAccount}
+            options={{ headerShown: false }}
+          />
+
+          <Stack.Screen
+            name="LoginByEmail"
+            component={LoginByEmail}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="LoginByPhone"
+            component={LoginByPhone}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="ForgetAccount"
+            component={ForgetAccount}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="ResetPassword"
+            component={ResetPassword}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="User"
+            component={User}
+            initialParams={{ authorization: authorization, storeData: storeInfo }}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="UserHome"
+            component={UserHome}
+            initialParams={{ authorization: authorization, storeData: storeInfo }}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="PersonInfo"
+            component={PersonInfo}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="Address"
+            component={Address}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="addNewAddress"
+            component={addNewAddress}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="editAddress"
+            component={editAddress}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="Order"
+            component={Order}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="OrderDetail"
+            component={OrderDetail}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="Service"
+            component={Service}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="ServiceProduct"
+            component={ServiceProduct}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="ServiceComment"
+            component={ServiceComment}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="ServiceCommentList"
+            component={ServiceCommentList}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="PayAddress"
+            component={PayAddress}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="PayDelivery"
+            component={PayDelivery}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="PayGateway"
+            component={PayGateway}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="PaypalApp"
+            component={PaypalApp}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="PaymentAddressList"
+            component={PaymentAddressList}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="PaymentResult"
+            component={PaymentResult}
+            options={{ headerShown: false }}
+          />
+
+          <Stack.Screen
+            name="Home"
+            component={Tabs}
+            options={{
+              title: null,
+              headerStyle: {
+                backgroundColor: COLORS.white
+              },
+              headerLeft: ({ onPress }) => (
                 <TouchableOpacity
-                  style={{marginRight:SIZES.padding}}
-                  onPress={()=>console.log("Pressed App")}
+                  style={{ marginLeft: SIZES.padding }}
+                  onPress={onPress}
                 >
-                  <Image 
-                    source={require("./assets/icons/menu.png")}
-                   
+                  <Image
+                    source={require("./assets/icons/back.png")}
                     resizeMode="contain"
                     style={{
-                      width:25,
-                      height:25,
-                      
+                      width: 25,
+                      height: 25
                     }}
                   />
 
-                 </TouchableOpacity>
-                
+                </TouchableOpacity>
+              ),
+              headerRight: () => (
+                <TouchableOpacity
+                  style={{ marginRight: SIZES.padding }}
+                  onPress={() => console.log("Menu")}
+                >
+                  <Image
+                    source={require("./assets/icons/menu.png")}
+                    resizeMode="contain"
+                    style={{
+                      width: 25,
+                      height: 25
+                    }}
+                  />
+                </TouchableOpacity>
               )
-            }
-          }}
-        />
-        <Stack.Screen 
-          name="BookingDetail"
-          component={BookingDetail}
-          options={{headerShown:false}}
-        />
-         <Stack.Screen 
-          name="Register"
-          component={Register}
-          options={{headerShown:false}}
-        />
-         <Stack.Screen 
-          name="CheckAccount"
-          component={CheckAccount}
-          options={{headerShown:false}}
-        />
-
-        <Stack.Screen
-          name="LoginByEmail"
-          component={LoginByEmail}
-          options={{headerShown:false}}
-        />
-        <Stack.Screen
-          name="LoginByPhone"
-          component={LoginByPhone}
-          options={{headerShown:false}}
-        />
-        <Stack.Screen
-          name="ForgetAccount"
-          component={ForgetAccount}
-          options={{headerShown:false}}
-        />
-        <Stack.Screen 
-          name="ResetPassword"
-          component={ResetPassword}
-          options={{headerShown:false}}
-        />
-        <Stack.Screen 
-          name="User"
-          component={User}
-          options={{headerShown:false}}
-        />
-        <Stack.Screen 
-          name="UserHome"
-          component={UserHome}
-          options={{headerShown:false}}
-        />
-        <Stack.Screen 
-          name="PersonInfo"
-          component={PersonInfo}
-          options={{headerShown:false}}
-        />
-        <Stack.Screen 
-          name="Address"
-          component={Address}
-          options={{headerShown:false}}
-        />
-        <Stack.Screen 
-          name="addNewAddress"
-          component={addNewAddress}
-          options={{headerShown:false}}
-        />
-        <Stack.Screen 
-          name="editAddress"
-          component={editAddress}
-          options={{headerShown:false}}
-        />
-        <Stack.Screen 
-          name="Order"
-          component={Order}
-          options={{headerShown:false}}
-        />
-        <Stack.Screen 
-          name="OrderDetail"
-          component={OrderDetail}
-          options={{headerShown:false}}
-        />
-        <Stack.Screen
-          name="Service"
-          component={Service}
-          options={{headerShown:false}}
-        />
-        <Stack.Screen
-          name="ServiceProduct"
-          component={ServiceProduct}
-          options={{headerShown:false}}
-        />
-        <Stack.Screen
-          name="ServiceComment"
-          component={ServiceComment}
-          options={{headerShown:false}}
-        />
-        <Stack.Screen
-          name="ServiceCommentList"
-          component={ServiceCommentList}
-          options={{headerShown:false}}
-        />
-        <Stack.Screen
-          name="PayAddress"
-          component={PayAddress}
-          options={{headerShown:false}}
-        />
-        <Stack.Screen
-          name="PayDelivery"
-          component={PayDelivery}
-          options={{headerShown:false}}
-        />
-        <Stack.Screen 
-          name="PayGateway"
-          component={PayGateway}
-          options={{headerShown:false}}
-        />
-        <Stack.Screen 
-          name="PaypalApp"
-          component={PaypalApp}
-          options={{headerShown:false}}
-        />
-        <Stack.Screen 
-          name="PaymentAddressList"
-          component={PaymentAddressList}
-          options={{headerShown:false}}
-        />
-        <Stack.Screen 
-          name="PaymentResult"
-          component={PaymentResult}
-          options={{headerShown:false}}
-        />
-
-        <Stack.Screen 
-          name="Home"
-          component={Tabs}
-          options={{
-            title:null,
-            headerStyle:{
-              backgroundColor:COLORS.white
-            },
-            headerLeft:({onPress})=>(
-              <TouchableOpacity
-                style={{marginLeft:SIZES.padding}}
-                onPress={onPress}
-              >
-                <Image
-                  source={require("./assets/icons/back.png")}
-                  resizeMode="contain"
-                  style={{
-                    width:25,
-                    height:25
-                  }}
-                />
-
-              </TouchableOpacity>
-            ),
-            headerRight:()=>(
-              <TouchableOpacity
-                style={{marginRight:SIZES.padding}}
-                onPress={()=>console.log("Menu")}
-              >
-                <Image
-                  source={require("./assets/icons/menu.png")}
-                  resizeMode="contain"
-                  style={{
-                    width:25,
-                    height:25
-                  }}
-                />
-              </TouchableOpacity>
-            )
-          }}
-        />
-      </Stack.Navigator>
+            }}
+          />
+        </Stack.Navigator>}
     </NavigationContainer>
   )
 }
 
-export default ()=>{
+export default () => {
   return (
     <RootSiblingParent>
-  <App/>
-  </RootSiblingParent>
+      <App />
+    </RootSiblingParent>
   );
 }
