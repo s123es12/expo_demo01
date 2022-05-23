@@ -2,7 +2,7 @@ module.exports={
     project:{
         ios:{
             "supportsTablet": true,
-            "bundleIdentifier": "com.goldrichtop.goldrichtop"
+            "bundleIdentifier": "com.treasurementech.goldrichtop"
           },
           
         android:{
@@ -16,7 +16,7 @@ module.exports={
                     "apiKey":"AIzaSyCzpAQPsICrj8e96EL7OY8YlBh8PJxSgMA"
                 }
             },
-            "package": "com.goldrichtop.goldrichtop"
+            "package": "com.treasurementech.goldrichtop"
           },
     },
     assets:["./assets/fonts/"]

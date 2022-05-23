@@ -3,7 +3,7 @@
     "scheme":"goldrichtop",
     "name": "expo_demo01",
     "slug": "expo_demo01",
-    "version": "1.0.0",
+    "version": "1.0.3",
     "orientation": "portrait",
     "icon": "./assets/icon_app.png",
     "splash": {
