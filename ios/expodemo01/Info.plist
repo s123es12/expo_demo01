@@ -2,28 +2,12 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
   <dict>
-
-<key>CFBundleURLTypes</key>
-<array>
-  <dict>
-  <key>CFBundleURLSchemes</key>
-  <array>
-    <string>fb1346816965720981</string>
-  </array>
-  </dict>
-</array>
-<key>FacebookAppID</key>
-<string>1346816965720981</string>
-<key>FacebookClientToken</key>
-<string>311c0703b559c877c1faa3d01f9ebd44</string>
-<key>FacebookDisplayName</key>
-<string>GoldRichApp</string>
     <key>CFBundleAllowMixedLocalizations</key>
     <true/>
     <key>CFBundleDevelopmentRegion</key>
     <string>$(DEVELOPMENT_LANGUAGE)</string>
     <key>CFBundleDisplayName</key>
-    <string>GoldRichApp</string>
+    <string>goldrichapp</string>
     <key>CFBundleExecutable</key>
     <string>$(EXECUTABLE_NAME)</string>
     <key>CFBundleIdentifier</key>
@@ -35,7 +19,7 @@
     <key>CFBundlePackageType</key>
     <string>$(PRODUCT_BUNDLE_PACKAGE_TYPE)</string>
     <key>CFBundleShortVersionString</key>
-    <string>2.0.7</string>
+    <string>2.0.8</string>
     <key>CFBundleSignature</key>
     <string>????</string>
     <key>CFBundleURLTypes</key>
@@ -57,9 +41,28 @@
           <string>com.treasurementech.goldrichtop</string>
         </array>
       </dict>
+      <dict>
+        <key>CFBundleURLSchemes</key>
+        <array>
+          <string>fb1346816965720981</string>
+        </array>
+      </dict>
     </array>
     <key>CFBundleVersion</key>
-    <string>1</string>
+    <string>2.0.8</string>
+    <key>FacebookAppID</key>
+    <string>1346816965720981</string>
+    <key>FacebookClientToken</key>
+    <string>311c0703b559c877c1faa3d01f9ebd44</string>
+    <key>FacebookDisplayName</key>
+    <string>React native first Expo</string>
+    <key>LSApplicationQueriesSchemes</key>
+    <array>
+      <string>fbapi</string>
+      <string>fb-messenger-api</string>
+      <string>fbauth2</string>
+      <string>fbshareextension</string>
+    </array>
     <key>LSRequiresIPhoneOS</key>
     <true/>
     <key>NSAppTransportSecurity</key>

@@ -1,9 +1,12 @@
 {
   "expo": {
+    "facebookScheme": "fb1346816965720981",
+    "facebookAppId": "1346816965720981",
+    "facebookDisplayName": "React native first Expo",
     "scheme": "goldrichapp",
-    "name": "GoldRichApp",
-    "slug": "GoldRichApp",
-    "version": "2.0.7",
+    "name": "goldrichapp",
+    "slug": "goldrichapp",
+    "version": "2.0.8",
     "orientation": "portrait",
     "icon": "./assets/icon_app.png",
     "splash": {
@@ -19,7 +22,9 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.treasurementech.goldrichtop"
+      "bundleIdentifier": "com.treasurementech.goldrichtop",
+      "buildNumber": "2.0.8",
+      "usesAppleSignIn": true
     },
     "android": {
       "adaptiveIcon": {
