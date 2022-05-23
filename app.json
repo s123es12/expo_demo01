@@ -1,9 +1,9 @@
 {
   "expo": {
-    "scheme":"goldrichtop",
-    "name": "expo_demo01",
-    "slug": "expo_demo01",
-    "version": "1.0.3",
+    "scheme":"GoldRichApp",
+    "name": "GoldRichApp",
+    "slug": "GoldRichApp",
+    "version": "1.0.4",
     "orientation": "portrait",
     "icon": "./assets/icon_app.png",
     "splash": {
@@ -19,17 +19,25 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.goldrichtop.goldrichtop"
+      "bundleIdentifier": "com.treasurementech.goldrichtop"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/icon_app.png",
         "backgroundColor": "#FFFFFF"
       },
-      "package": "com.goldrichtop.goldrichtop"
+      "package": "com.treasurementech.goldrichtop"
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "plugins": [
+      [
+        "expo-facebook",
+        {
+          "userTrackingPermission": false
+        }
+      ]
+    ]
   }
 }

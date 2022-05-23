@@ -1,4 +1,4 @@
-package host.exp.exponent;
+package com.treasurementech.goldrichtop;
 import android.content.res.Configuration;
 import android.content.Intent;
 

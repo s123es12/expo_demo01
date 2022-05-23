@@ -316,14 +316,15 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.goldrichtop.goldrichtop";
-				PRODUCT_NAME = exponent;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.treasurementech.goldrichtop";
+				PRODUCT_NAME = goldrichtop;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				SWIFT_OBJC_BRIDGING_HEADER = expodemo01/expodemo01-Bridging-Header.h;
-				CODE_SIGN_ENTITLEMENTS = expodemo01/exponent.entitlements;
+				CODE_SIGN_ENTITLEMENTS = expodemo01/goldrichtop.entitlements;
+				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = "arm64";
 			};
 			name = Debug;
 		};
@@ -342,13 +343,14 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.goldrichtop.goldrichtop";
-				PRODUCT_NAME = exponent;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.treasurementech.goldrichtop";
+				PRODUCT_NAME = goldrichtop;
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				SWIFT_OBJC_BRIDGING_HEADER = expodemo01/expodemo01-Bridging-Header.h;
-				CODE_SIGN_ENTITLEMENTS = expodemo01/exponent.entitlements;
+				CODE_SIGN_ENTITLEMENTS = expodemo01/goldrichtop.entitlements;
+				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = "arm64";
 			};
 			name = Release;
 		};
@@ -407,7 +409,7 @@
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
-				CODE_SIGN_ENTITLEMENTS = expodemo01/exponent.entitlements;
+				CODE_SIGN_ENTITLEMENTS = expodemo01/goldrichtop.entitlements;
 			};
 			name = Debug;
 		};
@@ -459,7 +461,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
-				CODE_SIGN_ENTITLEMENTS = expodemo01/exponent.entitlements;
+				CODE_SIGN_ENTITLEMENTS = expodemo01/goldrichtop.entitlements;
 			};
 			name = Release;
 		};

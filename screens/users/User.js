@@ -46,7 +46,7 @@ const user = ({ route }) => {
 
             <Tab.Navigator
                 screenOptions={({ route }) => ({
-
+                    
                     tabBarIcon: ({ focused, color, size }) => {
                         switch (route.name) {
                             case "UserHome":
@@ -80,7 +80,7 @@ const user = ({ route }) => {
                     options={{
                         headerShown: false,
                         title: "主頁"
-                    }}
+                    }} 
                     name="UserHome"
                     initialParams={{ authorization: authorization }}
                     component={UserHome}

@@ -132,12 +132,12 @@ android {
     }
 
     defaultConfig {
-        manifestPlaceholders = [appAuthRedirectScheme: 'dev.expo.app']
-        applicationId 'com.goldrichtop.goldrichtop'
+        manifestPlaceholders = [appAuthRedirectScheme: 'GoldRichApp']
+        applicationId 'com.treasurementech.goldrichtop'
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
-        versionName "1.0.0"
+        versionName "1.0.3"
     }
     splits {
         abi {

@@ -1,4 +1,4 @@
-rootProject.name = 'expo_demo01'
+rootProject.name = 'GoldRichApp'
 
 apply from: '../node_modules/react-native-unimodules/gradle.groovy'
 includeUnimodulesProjects()
