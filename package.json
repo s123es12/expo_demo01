@@ -76,6 +76,6 @@
   },
   "private": true,
   "proxy": "http://localhost:19006/",
-  "name": "expo_demo01",
-  "version": "1.0.0"
+  "name": "goldrichapp",
+  "version": "2.0.7"
 }
