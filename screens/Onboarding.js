@@ -8,13 +8,13 @@ import {
     Text,
 
 } from "react-native";
-
+import { ScrollView } from "react-native-gesture-handler";
 import { Button } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { COLORS, FONTS, SIZES } from "../constants";
 import * as Facebook from 'expo-facebook';
 import * as Google from 'expo-google-app-auth';
-
+import * as AppleAuthentication from 'expo-apple-authentication';
 
 const Onboarding = ({ navigation, route }) => {
 
@@ -74,8 +74,8 @@ const Onboarding = ({ navigation, route }) => {
     const handleGoogleSignin = async () => {
         setGoogleSubmitting(true);
         const config = {
-            iosStandaloneAppClientId: '1063096795567-v3gepjeecgpbonm8u2roqam6sn55b264.apps.googleusercontent.com',
-            androidStandaloneAppClientId: `1063096795567-clla3v10p2tvq8nl5c01eurkidc0nrg6.apps.googleusercontent.com`,
+            iosStandaloneAppClientId: '937805820238-t5co7vg2ev6qr43nrja4ud890pvitg21.apps.googleusercontent.com',
+            androidStandaloneAppClientId: `937805820238-6jcqdlhperrjlfkqo98go9l6grh4b6rr.apps.googleusercontent.com`,
             androidClientId: `1063096795567-g273bevnp3bbt2v0cef49luvo7v0hi7u.apps.googleusercontent.com`,
             iosClientId: `1063096795567-kbqgahiqk83oh6chop9nspr7nuqjnif5.apps.googleusercontent.com`,
             scopes: ['profile', 'email'],
@@ -195,121 +195,188 @@ const Onboarding = ({ navigation, route }) => {
             使用電郵登入
             還未有帳戶？立即註冊
         */
-        <View style={{ flex: 1, padding: SIZES.padding, marginTop: 40 }}>
-            <View style={{ flexDirection: 'column' }}>
-                {/* <Text style={{
+        <ScrollView>
+            <View style={{ flex: 1, padding: SIZES.padding, marginTop: 40 }}>
+                <View style={{ flexDirection: 'column' }}>
+                    {/* <Text style={{
                         fontSize:SIZES.h2,
                         color:"black",
                         fontWeight:'700',
                         
                     }}>{storeInfo.store_name}</Text> */}
-                <Image
-                    style={{
-                        height: 175,
-                        width: 250,
+                    <Image
+                        style={{
+                            height: 175,
+                            width: 250,
+                        }}
+                        resizeMode='contain'
+                        source={{ uri: storeInfo.store_image }}
+                    />
+                    <Text style={[FONTS.h2, { fontWeight: "700", marginTop: 20 }]}>歡迎回來</Text>
+                    <Text style={[FONTS.h3, { marginBottom: 60 }]}>登入你的帳戶</Text>
+                </View>
+
+                <AppleAuthentication.AppleAuthenticationButton
+                    buttonType={AppleAuthentication.AppleAuthenticationButtonType.SIGN_IN}
+                    buttonStyle={AppleAuthentication.AppleAuthenticationButtonStyle.BLACK}
+                    cornerRadius={5}
+                    style={{ height: 44, marginBottom: 24, fontSize: 18 }}
+                    onPress={async () => {
+                        try {
+                            const credential = await AppleAuthentication.signInAsync({
+
+                                requestedScopes: [
+                                    AppleAuthentication.AppleAuthenticationScope.FULL_NAME,
+                                    AppleAuthentication.AppleAuthenticationScope.EMAIL,
+
+                                ],
+                            });
+                            //console.log('social login');
+                            console.log(credential);
+
+
+
+                            fetch('https://goldrich.top/api/rest/sociallogin', {
+                                method: 'POST',
+                                headers: {
+                                    Accept: 'application/json',
+                                    'Content-Type': 'application/json',
+                                    'Authorization': 'Bearer ' + authorization,
+
+                                }, body: JSON.stringify({
+                                    "familyName": credential.fullName.familyName,
+                                    "givenName": credential.fullName.givenName,
+                                    "social_access_token": credential.identityToken,
+                                    "provider": "apple",
+                                    "user": credential.user
+                                })
+                            })
+                                .then(response => response.json())
+                                .then((responseJson) => {
+                                    console.log('social login');
+                                    console.log(responseJson);
+                                    if (responseJson.success == 1) {
+                                        handleMessage('');
+                                        navigation.navigate('User', { authorization: authorization, data: responseJson.data });
+
+                                    } else if (responseJson.success == 0) {
+                                        // setError(responseJson.error);
+                                        // setTimeout(()=>navigation.navigate('LoginByPhone',{authorization:authorization,userInfo:user}),1000);
+                                    } else if (JSON.stringify(responseJson.error[0]).match('The access token provided is invalid')) {
+                                        setResetAuth(!resetAuth);
+                                    }
+                                }).catch((err) => console.log(err))
+
+                            // signed in
+
+
+
+                        } catch (e) {
+                            if (e.code === 'ERR_CANCELED') {
+                                // handle that the user canceled the sign-in flow
+                            } else {
+                                // handle other errors
+                            }
+                        }
                     }}
-                    resizeMode='contain'
-                    source={{ uri: storeInfo.store_image }}
                 />
-                <Text style={[FONTS.h2, { fontWeight: "700", marginTop: 20 }]}>歡迎回來</Text>
-                <Text style={[FONTS.h3, { marginBottom: 60 }]}>登入你的帳戶</Text>
-            </View>
 
+                <View style={{ marginBottom: SIZES.padding }}>
+                    <Button
+                        icon={
+                            <Icon
+                                name="facebook"
+                                size={22}
+                                color="white"
+                            />
+                        }
+                        buttonStyle={{ backgroundColor: '#1877f2' }}
+                        titleStyle={{ marginLeft: 10, fontSize: 18, fontWeight: "bold" }}
+                        title="使用Facebook帳戶登入"
+                        onPress={logIn}
+                    />
+                </View>
 
-            <View style={{ marginBottom: SIZES.padding }}>
-                <Button
-                    icon={
-                        <Icon
-                            name="facebook"
-                            size={22}
-                            color="white"
+                <View style={{ marginBottom: SIZES.padding, borderWidth: 1, borderRadius: 5 }}>
+                    {!googleSubmitting && (
+
+                        <Button
+                            icon={
+                                <Icon
+                                    name="google"
+                                    size={22}
+
+                                />
+
+                            }
+                            disabled={false}
+                            buttonStyle={{ backgroundColor: 'transparent' }}
+                            titleStyle={{ color: '#000', marginLeft: 10, fontSize: 18, fontWeight: "bold" }}
+                            title="使用Google帳戶登入"
+                            onPress={handleGoogleSignin}
                         />
-                    }
-                    buttonStyle={{ backgroundColor: '#1877f2' }}
-                    titleStyle={{ marginLeft: 10, fontSize: 18, fontWeight: "bold" }}
-                    title="使用Facebook帳戶登入"
-                    onPress={logIn}
-                />
-            </View>
 
-            <View style={{ marginBottom: SIZES.padding, borderWidth: 1, borderRadius: 5 }}>
-                {!googleSubmitting && (
+
+                    )}
+                    {googleSubmitting && (
+
+                        <Button
+                            icon={
+                                <Icon
+                                    name="google"
+                                    size={22}
+
+                                />
+
+                            }
+                            disabled={true}
+                            buttonStyle={{ backgroundColor: 'transparent' }}
+                            titleStyle={{ color: '#000', marginLeft: 10, fontSize: 18, fontWeight: "bold" }}
+                            title="使用Google帳戶登入"
+                            onPress={handleGoogleSignin}
+
+                        />
+
+                    )}
+                </View>
+                <Text style={[styles.errorText, { fontSize: 16, color: messageType == 'SUCCESS' ? 'green' : 'red' }]}>{message}</Text>
+
+                <Text style={styles.textStyle}>或</Text>
+
+                <View style={{ marginBottom: SIZES.padding, borderWidth: 1, borderRadius: 5 }}>
+                    <Button
+                        icon={
+                            <Icon name='envelope' size={22} />
+                        }
+
+                        buttonStyle={{ backgroundColor: 'transparent' }}
+                        titleStyle={{ color: '#000', marginLeft: 10, fontSize: 18, fontWeight: "bold" }}
+                        title="使用電郵登入"
+                        onPress={() => navigation.navigate('LoginByEmail', { authorization: authorization })}
+                    />
+
+                </View>
+                <View style={{ marginBottom: SIZES.padding, borderWidth: 1, borderRadius: 5 }}>
 
                     <Button
                         icon={
-                            <Icon
-                                name="google"
-                                size={22}
-
-                            />
-
+                            <Icon name='home' size={22} />
                         }
-                        disabled={false}
+
                         buttonStyle={{ backgroundColor: 'transparent' }}
                         titleStyle={{ color: '#000', marginLeft: 10, fontSize: 18, fontWeight: "bold" }}
-                        title="使用Google帳戶登入"
-                        onPress={handleGoogleSignin}
+                        title="返回首頁"
+                        onPress={() => navigation.navigate('User', { authorization: authorization })}
                     />
+                </View>
+                <View style={{ alignItems: 'center', flex: 1, flexDirection: 'row', justifyContent: 'center' }}>
 
-
-                )}
-                {googleSubmitting && (
-
-                    <Button
-                        icon={
-                            <Icon
-                                name="google"
-                                size={22}
-
-                            />
-
-                        }
-                        disabled={true}
-                        buttonStyle={{ backgroundColor: 'transparent' }}
-                        titleStyle={{ color: '#000', marginLeft: 10, fontSize: 18, fontWeight: "bold" }}
-                        title="使用Google帳戶登入"
-                        onPress={handleGoogleSignin}
-
-                    />
-
-                )}
-            </View>
-            <Text style={[styles.errorText, { fontSize: 16, color: messageType == 'SUCCESS' ? 'green' : 'red' }]}>{message}</Text>
-
-            <Text style={styles.textStyle}>或</Text>
-
-            <View style={{ marginBottom: SIZES.padding, borderWidth: 1, borderRadius: 5 }}>
-                <Button
-                    icon={
-                        <Icon name='envelope' size={22} />
-                    }
-
-                    buttonStyle={{ backgroundColor: 'transparent' }}
-                    titleStyle={{ color: '#000', marginLeft: 10, fontSize: 18, fontWeight: "bold" }}
-                    title="使用電郵登入"
-                    onPress={() => navigation.navigate('LoginByEmail', { authorization: authorization })}
-                />
+                    <Text style={{}}>還未有帳戶？</Text>
+                    <Text style={{ flex: 1 }} onPress={() => navigation.navigate('Register', { authorization: authorization })} style={{ color: "red" }}>立即註冊</Text>
+                </View>
 
             </View>
-            <View style={{ marginBottom: SIZES.padding, borderWidth: 1, borderRadius: 5 }}>
-
-                <Button
-                    icon={
-                        <Icon name='home' size={22} />
-                    }
-
-                    buttonStyle={{ backgroundColor: 'transparent' }}
-                    titleStyle={{ color: '#000', marginLeft: 10, fontSize: 18, fontWeight: "bold" }}
-                    title="返回首頁"
-                    onPress={() => navigation.navigate('User', { authorization: authorization })}
-                />
-            </View>
-            <View style={{ alignItems: 'center', flex: 1, flexDirection: 'row', justifyContent: 'center' }}>
-
-                <Text style={{}}>還未有帳戶？</Text>
-                <Text style={{ flex: 1 }} onPress={() => navigation.navigate('Register', { authorization: authorization })} style={{ color: "red" }}>立即註冊</Text>
-            </View>
-        </View>
+        </ScrollView>
 
     )
 }
