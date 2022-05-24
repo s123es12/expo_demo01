@@ -62,7 +62,7 @@ const UserHome = ({ navigation, route }) => {
             .then(response => response.json())
             .then((responseJson) => {
                 if (responseJson.success == 1) {
-                    navigation.navigate('Onboarding');
+                    navigation.navigate('Onboarding', { authorization: route.params.authorization });
                 } else {
                     console.log(responseJson);
                 }
@@ -201,7 +201,7 @@ const UserHome = ({ navigation, route }) => {
             .then((responseJson) => {
                 console.log('UserHome', responseJson);
                 if (responseJson.success == 1) {
-                    setUserLogin(false);
+                    setUserLogin(true);
                 } else if (responseJson.success == 0) {
                     setUserLogin(false);
                 }

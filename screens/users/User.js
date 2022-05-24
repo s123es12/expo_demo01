@@ -30,12 +30,14 @@ const Stack = createStackNavigator();
 
 const user = ({ route }) => {
     const [authorization, setAuthorization] = useState(null);
+    const [userInfo, setUserInfo] = useState(null);
     useEffect(() => {
-        console.log(route.params)
+        console.log('user', route.params)
         if (route.params.authorization !== null) {
             setAuthorization(route.params.authorization)
         }
-    }, [])
+    }, [])  
+
 
 
     return (
@@ -46,7 +48,7 @@ const user = ({ route }) => {
 
             <Tab.Navigator
                 screenOptions={({ route }) => ({
-                    
+
                     tabBarIcon: ({ focused, color, size }) => {
                         switch (route.name) {
                             case "UserHome":
@@ -80,7 +82,7 @@ const user = ({ route }) => {
                     options={{
                         headerShown: false,
                         title: "主頁"
-                    }} 
+                    }}
                     name="UserHome"
                     initialParams={{ authorization: authorization }}
                     component={UserHome}
@@ -92,7 +94,7 @@ const user = ({ route }) => {
                         headerShown: false,
                         title: "分類"
                     }}
-                    initialParams={{ authorization: route.params.authorization }}
+                    initialParams={{ authorization: authorization }}
                     name="Category"
                     component={Category}
                 />
@@ -102,7 +104,7 @@ const user = ({ route }) => {
                         title: "搜尋"
                     }}
                     name="Search"
-                    initialParams={{ authorization: route.params.authorization }}
+                    initialParams={{ authorization: authorization }}
                     component={Search}
                 />
                 <Tab.Screen
@@ -111,7 +113,7 @@ const user = ({ route }) => {
                         title: "購物車"
                     }}
                     name="Carts"
-                    initialParams={{ authorization: route.params.authorization }}
+                    initialParams={{ authorization: authorization }}
                     component={Carts}
                 />
                 <Tab.Screen
@@ -121,8 +123,8 @@ const user = ({ route }) => {
                     }}
                     name="Account"
                     initialParams={{
-                        authorization: route.params.authorization
-                        , data: route.params.storeData
+                        authorization: authorization
+
                     }}
                     component={Account}
                 />

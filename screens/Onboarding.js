@@ -28,43 +28,32 @@ const Onboarding = ({ navigation, route }) => {
     const [userGoogleInfo, setUserGoogleInfo] = useState({});
     const [googleSubmitting, setGoogleSubmitting] = useState(false);
 
+
+
     useEffect(() => {
+        console.log('user', route.params)
+        if (route.params && route.params.authorization !== null) {
+            setAuthorization(route.params.authorization);
+            fetch('https://goldrich.top/api/rest/stores/0', {
+                method: 'GET',
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + route.params.authorization,
 
-        fetch('https://goldrich.top/api/rest/oauth2/token/client_credentials', {
-            method: 'POST',
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-                'Authorization': 'Basic c2hvcHBpbmdfb2F1dGhfY2xpZW50OnNob3BwaW5nX29hdXRoX3NlY3JldA=='
-            }
-        })
-            .then(response => response.json())
-            .then((responseJson) => {
-
-                setAuthorization(responseJson.data.access_token);
-                fetch('https://goldrich.top/api/rest/stores/0', {
-                    method: 'GET',
-                    headers: {
-                        Accept: 'application/json',
-                        'Content-Type': 'application/json',
-                        'Authorization': 'Bearer ' + responseJson.data.access_token,
+                }
+            })
+                .then(response => response.json())
+                .then((responseJson) => {
+                    if (responseJson.success == 1) {
+                        setStoreInfo(responseJson.data);
+                    } else if (responseJson.success == 0) {
 
                     }
-                })
-                    .then(response => response.json())
-                    .then((responseJson) => {
-                        if (responseJson.success == 1) {
-                            setStoreInfo(responseJson.data);
-                        } else if (responseJson.success == 0) {
 
-                        }
-
-                    }).catch((err) => console.log(err));
-            }).catch((err) => console.log(err));
-
-
-
-    }, [resetAuth]);
+                }).catch((err) => console.log(err));
+        }
+    }, [])
 
     const handleMessage = (message, type = 'FAILED') => {
         setMessage(message);
@@ -165,7 +154,7 @@ const Onboarding = ({ navigation, route }) => {
                 })
                     .then(response => response.json())
                     .then((responseJson) => {
-                        //console.log(responseJson);
+                        console.log(responseJson);
                         if (responseJson.success == 1) {
                             handleMessage('');
                             setTimeout(() => navigation.navigate('User', { authorization: authorization, data: responseJson.data }), 1000);
@@ -184,7 +173,9 @@ const Onboarding = ({ navigation, route }) => {
         }
     }
 
+    useEffect(() => {
 
+    }, [])
 
     return (
         /** 

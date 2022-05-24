@@ -68,6 +68,7 @@ const Account = ({ navigation, route }) => {
 
 
     useEffect(() => {
+        console.log('Account', route.params.authorization)
         fetch('https://goldrich.top/api/rest/stores/0', {
             method: 'GET',
             headers: {
@@ -88,6 +89,7 @@ const Account = ({ navigation, route }) => {
 
             }).catch((err) => console.log(err))
             .finally(() => setLoadStore(false));
+
 
         fetch('https://goldrich.top/api/rest/account', {
             method: 'GET',
@@ -122,13 +124,13 @@ const Account = ({ navigation, route }) => {
                                 onPress: () => console.log('Cancel Pressed'),
                                 style: 'cancel',
                             },
-                            { text: 'Login', onPress: () => navigation.navigate("Onboarding") },
+                            { text: 'Login', onPress: () => navigation.navigate("Onboarding", { authorization: route.params.authorization }) },
                         ]);
                     }
                 }
             }).catch((err) => console.log(err))
             .finally(() => setLoadUser(false))
-    }, [isFocused])
+    }, [isFocused == true])
 
 
 

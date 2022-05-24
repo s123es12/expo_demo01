@@ -6,7 +6,7 @@
     "scheme": "goldrichapp",
     "name": "goldrichapp",
     "slug": "goldrichapp",
-    "version": "2.0.8",
+    "version": "2.1.0",
     "orientation": "portrait",
     "icon": "./assets/icon_app.png",
     "splash": {
@@ -23,7 +23,7 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.treasurementech.goldrichtop",
-      "buildNumber": "2.0.8",
+      "buildNumber": "2.1.0",
       "usesAppleSignIn": true
     },
     "android": {
@@ -31,7 +31,8 @@
         "foregroundImage": "./assets/icon_app.png",
         "backgroundColor": "#FFFFFF"
       },
-      "package": "com.treasurementech.goldrichtop"
+      "package": "com.treasurementech.goldrichtop",
+      "versionCode": 3
     },
     "web": {
       "favicon": "./assets/favicon.png"
