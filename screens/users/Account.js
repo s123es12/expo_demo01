@@ -102,7 +102,7 @@ const Account = ({ navigation, route }) => {
         })
             .then(response => response.json())
             .then((responseJson) => {
-                console.log('Account', responseJson);
+                //console.log('Account', responseJson);
                 if (responseJson.success == 1) {
                     setUserData(responseJson.data);
 

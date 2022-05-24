@@ -32,7 +32,7 @@ const user = ({ route }) => {
     const [authorization, setAuthorization] = useState(null);
     const [userInfo, setUserInfo] = useState(null);
     useEffect(() => {
-        console.log('user', route.params)
+        //console.log('user', route.params)
         if (route.params.authorization !== null) {
             setAuthorization(route.params.authorization)
         }

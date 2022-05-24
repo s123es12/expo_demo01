@@ -31,7 +31,7 @@ const Onboarding = ({ navigation, route }) => {
 
 
     useEffect(() => {
-        console.log('user', route.params)
+        //console.log('user', route.params)
         if (route.params && route.params.authorization !== null) {
             setAuthorization(route.params.authorization);
             fetch('https://goldrich.top/api/rest/stores/0', {
