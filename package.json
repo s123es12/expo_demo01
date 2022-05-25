@@ -69,10 +69,16 @@
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",
+    "jest": "^28.1.0",
     "nodemon": "^2.0.14"
   },
   "resolutions": {
     "@react-native-community/viewpager": "^2.0.1"
+  },
+  "jest": {
+    "setupFiles": [
+      "./mock.js"
+    ]
   },
   "private": true,
   "proxy": "http://localhost:19006/",

@@ -199,7 +199,7 @@ const UserHome = ({ navigation, route }) => {
         })
             .then(response => response.json())
             .then((responseJson) => {
-                console.log('UserHome', responseJson);
+                //console.log('UserHome', responseJson);
                 if (responseJson.success == 1) {
                     setUserLogin(true);
                 } else if (responseJson.success == 0) {
@@ -364,11 +364,8 @@ const UserHome = ({ navigation, route }) => {
             <ScrollView >
                 <View style={{ marginBottom: 10, backgroundColor: '#fff' }}>
 
-                    {/* <Image
-                    source={require("../../assets/images/L01.jpeg")}
-                    style={{height:'100%',width:'100%',resizeMode:'cover',borderRadius:10}}
-                /> */}
-                    <Carousel
+
+                    {/* <Carousel
                         autoplay={true}
                         autoplayTimeout={5000}
                         loop={true}
@@ -388,7 +385,7 @@ const UserHome = ({ navigation, route }) => {
                             }
 
                         })}
-                    </Carousel>
+                    </Carousel> */}
 
                 </View>
 

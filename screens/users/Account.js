@@ -68,7 +68,7 @@ const Account = ({ navigation, route }) => {
 
 
     useEffect(() => {
-        console.log('Account', route.params.authorization)
+        //console.log('Account', route.params.authorization)
         fetch('https://goldrich.top/api/rest/stores/0', {
             method: 'GET',
             headers: {

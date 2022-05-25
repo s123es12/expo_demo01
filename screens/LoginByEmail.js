@@ -30,8 +30,8 @@ const LoginByEmail = ({ navigation ,route}) => {
     } = useForm(
         {
             defaultValues: {
-                email: '',
-                password:'',
+                email: 'we@we.com',
+                password:'test',
                 
               },
         }
