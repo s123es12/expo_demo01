@@ -77,7 +77,7 @@ const PaymentAddressList = ({ navigation, route }) => {
                     //console.log(responseJson);
                     if (responseJson.success == 1) {
 
-                        setToastText("Sucees!");
+                        setToastText("Success!");
                         setShowToast(true);
 
                     } else if (responseJson.success == 0) {
@@ -106,7 +106,7 @@ const PaymentAddressList = ({ navigation, route }) => {
                     //console.log(responseJson);
                     if (responseJson.success == 1) {
                         setShowToast(true);
-                        setToastText("Sucees!");
+                        setToastText("Success!");
 
 
                     } else if (responseJson.success == 0) {
